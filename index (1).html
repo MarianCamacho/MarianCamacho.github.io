@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Programming Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #fdf8f3;
+      --blush: #f5d6d0;
+      --rose: #d4897a;
+      --rose-dark: #a85f52;
+      --sage: #b8c9b2;
+      --sage-dark: #6e8f67;
+      --text: #2c2420;
+      --text-muted: #7a6760;
+      --card-bg: #ffffff;
+      --border: #ecddd8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── SUBTLE BACKGROUND TEXTURE ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle at 20% 20%, #f5d6d022 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, #b8c9b222 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      background: rgba(253, 248, 243, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      color: var(--rose-dark);
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--rose-dark); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+    }
+
+    .hero-inner { max-width: 680px; }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blush), var(--sage));
+      margin: 0 auto 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      border: 4px solid white;
+      box-shadow: 0 8px 32px rgba(212, 137, 122, 0.2);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: var(--blush);
+      color: var(--rose-dark);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--rose-dark);
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 480px;
+      margin: 0 auto 2.4rem;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--rose-dark);
+      color: white;
+      padding: 0.85rem 2rem;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(168, 95, 82, 0.3);
+    }
+
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(168, 95, 82, 0.35);
+    }
+
+    /* ── DECORATIVE BLOBS ── */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .blob-1 {
+      width: 300px; height: 300px;
+      background: var(--blush);
+      top: 10%; left: -80px;
+      filter: blur(60px);
+    }
+
+    .blob-2 {
+      width: 250px; height: 250px;
+      background: var(--sage);
+      bottom: 10%; right: -60px;
+      filter: blur(60px);
+    }
+
+    /* ── SECTION SHARED ── */
+    section {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .section-label span {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--rose-dark);
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 540px;
+      margin-bottom: 3rem;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 700px) {
+      .about-grid { grid-template-columns: 1fr; }
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.2rem; }
+    }
+
+    .about-text p {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.5rem;
+    }
+
+    .skill-pill {
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.4rem 0.9rem;
+      border-radius: 100px;
+      transition: all 0.2s;
+    }
+
+    .skill-pill:hover {
+      border-color: var(--rose);
+      color: var(--rose-dark);
+      background: var(--blush);
+    }
+
+    .about-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .stat-box {
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--rose-dark);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* ── PROJECTS ── */
+    #projects { background: transparent; }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 48px rgba(212, 137, 122, 0.15);
+    }
+
+    .project-thumb {
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-thumb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.12;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255,255,255,0.3) 10px,
+        rgba(255,255,255,0.3) 20px
+      );
+    }
+
+    .project-body {
+      padding: 1.4rem;
+    }
+
+    .project-type {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .type-midterm { color: var(--rose-dark); }
+    .type-final { color: var(--sage-dark); }
+    .type-lab { color: #7a6baa; }
+    .type-activity { color: #c49a4e; }
+
+    .project-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+
+    .project-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-tag {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 100px;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--rose-dark);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+
+    .project-link:hover { gap: 0.7rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 3rem 2rem 4rem;
+      border-top: 1px solid var(--border);
+    }
+
+    footer p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    footer strong {
+      color: var(--rose-dark);
+    }
+
+    /* ── FADE-IN ANIMATION ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">✦ my portfolio</div>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#midterm">Midterm</a></li>
+      <li><a href="#final">Final</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero" id="home">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="hero-inner">
+      <div class="avatar">🌸</div>
+      <div class="hero-tag">Programming Class Portfolio</div>
+      <h1>Hello, I'm <em>Your Name!</em></h1>
+      <p class="hero-desc">
+        A collection of my work from this semester — from midterm to finals,
+        every project is a step in my journey as a programmer.
+      </p>
+      <a href="#projects" class="hero-cta">View My Projects ↓</a>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">    <div class="section-label"><span>About Me</span></div>
+    <h2 class="section-title">A little about myself</h2>
+    <p class="section-sub">I'm a student passionate about learning to code and bringing ideas to life through programming.</p>
+
+    <div class="about-grid">
+      <div class="about-text fade-up">
+        <p>
+          Hi! I'm currently taking a programming class and this portfolio showcases everything I've built this semester — from my very first exercises to my final project.
+        </p>
+        <p>
+          Each project represents something I learned, struggled with, and eventually figured out. I'm proud of how far I've come!
+        </p>
+        <div class="skills-list">
+          <span class="skill-pill">HTML</span>
+          <span class="skill-pill">CSS</span>
+          <span class="skill-pill">JavaScript</span>
+          <span class="skill-pill">Python</span>
+          <span class="skill-pill">Problem Solving</span>
+          <span class="skill-pill">Git & GitHub</span>
+        </div>
+      </div>
+
+      <div class="about-card fade-up" style="transition-delay: 0.1s;">
+        <p style="font-size:0.8rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.5rem;">This Semester at a Glance</p>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-num">5+</div>
+            <div class="stat-label">Projects Built</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">2</div>
+            <div class="stat-label">Major Outputs</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">1</div>
+            <div class="stat-label">Final Project</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">∞</div>
+            <div class="stat-label">Things Learned</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MIDTERM -->
+  <section id="midterm">
+    <div class="section-label"><span>Midterm</span></div>
+    <h2 class="section-title">Midterm Outputs</h2>
+    <p class="section-sub">Projects and exercises completed for my midterm. Click any card to view it on GitHub.</p>
+
+    <div class="projects-grid">
+
+      <a href="https://github.com/yourusername/your-midterm-repo" target="_blank" class="project-card fade-up">
+        <div class="project-thumb" style="background: linear-gradient(135deg, #f5d6d0, #f0b8b0);">🌷</div>
+        <div class="project-body">
+          <div class="project-type type-midterm">Midterm Output</div>
+          <h3 class="project-title">Midterm Project Title</h3>
+          <p class="project-desc">A short description of what your midterm project does and what you learned building it. Replace this with your actual project!</p>
+          <div class="project-tags">
+            <span class="project-tag">HTML</span>
+            <span class="project-tag">CSS</span>
+            <span class="project-tag">JavaScript</span>
+          </div>
+          <span class="project-link">View on GitHub →</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/yourusername/lab-1" target="_blank" class="project-card fade-up" style="transition-delay:0.05s;">
+        <div class="project-thumb" style="background: linear-gradient(135deg, #dcd6f7, #b8aff0);">🔮</div>
+        <div class="project-body">
+          <div class="project-type type-lab">Laboratory</div>
+          <h3 class="project-title">Lab Exercise 1</h3>
+          <p class="project-desc">Describe what this lab exercise was about and what concepts it helped you practice. Update the link and title!</p>
+          <div class="project-tags">
+            <span class="project-tag">Basics</span>
+            <span class="project-tag">Variables</span>
+          </div>
+          <span class="project-link">View on GitHub →</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/yourusername/lab-2" target="_blank" class="project-card fade-up" style="transition-delay:0.10s;">
+        <div class="project-thumb" style="background: linear-gradient(135deg, #fde8c8, #f7cc8f);">☀️</div>
+        <div class="project-body">
+          <div class="project-type type-activity">Activity</div>
+          <h3 class="project-title">Activity 2</h3>
+          <p class="project-desc">What was this activity about? What did you build or practice? Add your own description and link to your repo.</p>
+          <div class="project-tags">
+            <span class="project-tag">Loops</span>
+            <span class="project-tag">Conditionals</span>
+          </div>
+          <span class="project-link">View on GitHub →</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- FINAL -->
+  <section id="final">
+    <div class="section-label"><span>Final</span></div>
+    <h2 class="section-title">Final Outputs</h2>
+    <p class="section-sub">My most polished work — the projects I built towards the end of the semester.</p>
+
+    <div class="projects-grid">
+
+      <a href="https://github.com/yourusername/your-final-repo" target="_blank" class="project-card fade-up">
+        <div class="project-thumb" style="background: linear-gradient(135deg, #b8c9b2, #8fad87);">🌿</div>
+        <div class="project-body">
+          <div class="project-type type-final">Final Output</div>
+          <h3 class="project-title">Final Project Title</h3>
+          <p class="project-desc">Your most polished work! Describe what your final project is, what problem it solves, and the technologies you used.</p>
+          <div class="project-tags">
+            <span class="project-tag">Python</span>
+            <span class="project-tag">Data Structures</span>
+          </div>
+          <span class="project-link">View on GitHub →</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/yourusername/lab-3" target="_blank" class="project-card fade-up" style="transition-delay:0.05s;">
+        <div class="project-thumb" style="background: linear-gradient(135deg, #c8e8f5, #90cce8);">🌊</div>
+        <div class="project-body">
+          <div class="project-type type-lab">Laboratory</div>
+          <h3 class="project-title">Lab Exercise 3</h3>
+          <p class="project-desc">Describe this lab — functions, arrays, or something else you were working on. Replace with your real content!</p>
+          <div class="project-tags">
+            <span class="project-tag">Functions</span>
+            <span class="project-tag">Arrays</span>
+          </div>
+          <span class="project-link">View on GitHub →</span>
+        </div>
+      </a>
+
+      <a href="https://github.com/yourusername/extra" target="_blank" class="project-card fade-up" style="transition-delay:0.10s;">
+        <div class="project-thumb" style="background: linear-gradient(135deg, #f5e6d3, #e8c9a8);">🍂</div>
+        <div class="project-body">
+          <div class="project-type type-activity">Bonus / Extra</div>
+          <h3 class="project-title">Additional Project</h3>
+          <p class="project-desc">Got an extra project or creative exercise? Add it here! This card is a great spot for anything that doesn't fit the other categories.</p>
+          <div class="project-tags">
+            <span class="project-tag">Creative</span>
+            <span class="project-tag">Extra</span>
+          </div>
+          <span class="project-link">View on GitHub →</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" style="text-align:center; max-width:600px;">
+    <div class="section-label"><span>Get In Touch</span></div>
+    <h2 class="section-title fade-up">Let's connect!</h2>
+    <p class="section-sub fade-up" style="margin-left:auto; margin-right:auto;">
+      Feel free to reach out if you'd like to know more about my projects or just say hi! 🌸
+    </p>
+    <a href="mailto:youremail@example.com" class="hero-cta fade-up">Say Hello ✉</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Made with 🌸 by <strong>Your Name</strong> · Programming Class Portfolio · 2025</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

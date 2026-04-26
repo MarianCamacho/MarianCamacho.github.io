@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My E-Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0d0a14;
+  --paper:#f5f0e8;
+  --paper2:#ede7d9;
+  --purple:#7c5cbf;
+  --purple-lt:#c9b8f0;
+  --purple-pale:#ede8fc;
+  --white:#ffffff;
+}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'DM Mono',monospace;cursor:crosshair;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(124,92,191,.12) 1px,transparent 1px);background-size:18px 18px;pointer-events:none;z-index:0;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--ink);border-bottom:3px solid var(--purple-lt);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:58px;}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.08em;color:var(--purple-lt);}
+.nav-links{display:flex;gap:.2rem;}
+.nav-links a{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--paper);text-decoration:none;padding:.45rem 1rem;border:1.5px solid transparent;transition:all .18s;}
+.nav-links a:hover,.nav-links a.active{border-color:var(--purple-lt);color:var(--purple-lt);background:rgba(201,184,240,.08);}
+
+/* PAGES */
+.page{display:none;padding-top:58px;min-height:100vh;position:relative;z-index:1;}
+.page.active{display:block;animation:pagein .35s ease;}
+@keyframes pagein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 58px);border-bottom:3px solid var(--ink);}
+.hero-left{border-right:3px solid var(--ink);padding:3.5rem 3rem;display:flex;flex-direction:column;justify-content:space-between;background:var(--ink);position:relative;overflow:hidden;}
+.hero-left::after{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(201,184,240,.18) 1.5px,transparent 1.5px);background-size:14px 14px;pointer-events:none;}
+.hero-eyebrow{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--purple-lt);border-bottom:1px solid rgba(201,184,240,.3);padding-bottom:.6rem;margin-bottom:2rem;position:relative;z-index:1;}
+.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,8vw,7rem);line-height:.92;color:var(--white);position:relative;z-index:1;}
+.hero-name .accent{color:transparent;-webkit-text-stroke:2px var(--purple-lt);}
+.hero-desc{font-size:.82rem;line-height:1.75;color:rgba(245,240,232,.65);margin-top:2rem;max-width:340px;position:relative;z-index:1;}
+.hero-btns{display:flex;gap:.7rem;margin-top:2.5rem;flex-wrap:wrap;position:relative;z-index:1;}
+.btn{font-family:'DM Mono',monospace;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;padding:.65rem 1.5rem;cursor:pointer;border:2px solid;text-decoration:none;display:inline-block;transition:all .2s;}
+.btn-primary{background:var(--purple-lt);color:var(--ink);border-color:var(--purple-lt);}
+.btn-primary:hover{background:var(--purple);color:var(--white);border-color:var(--purple);}
+.btn-outline{background:transparent;color:var(--purple-lt);border-color:var(--purple-lt);}
+.btn-outline:hover{background:var(--purple-lt);color:var(--ink);}
+.hero-right{display:grid;grid-template-rows:1fr auto;}
+.hero-art{display:flex;align-items:center;justify-content:center;background:var(--purple-pale);border-bottom:3px solid var(--ink);padding:3rem 2rem;position:relative;overflow:hidden;min-height:320px;}
+.hero-art::before{content:'';position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 50% 50%,transparent 0deg,transparent 8.5deg,rgba(124,92,191,.07) 8.5deg,rgba(124,92,191,.07) 9deg);pointer-events:none;}
+.avatar-frame{width:190px;height:190px;border-radius:50%;border:4px solid var(--ink);background:linear-gradient(135deg,var(--purple-lt),var(--purple));display:flex;align-items:center;justify-content:center;font-size:4.5rem;box-shadow:6px 6px 0 var(--ink);position:relative;z-index:1;}
+.hero-info{padding:1.6rem 2rem;display:flex;flex-direction:column;gap:.55rem;}
+.info-row{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(13,10,20,.13);padding-bottom:.5rem;font-size:.78rem;}
+.info-label{color:var(--purple);letter-spacing:.1em;text-transform:uppercase;font-size:.66rem;}
+
+/* TICKER */
+.ticker-wrap{overflow:hidden;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);background:var(--purple);padding:.6rem 0;}
+.ticker-inner{display:flex;white-space:nowrap;animation:ticker 22s linear infinite;}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-text{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.15em;color:var(--purple-pale);padding:0 2rem;}
+.ticker-dot{color:var(--purple-lt);margin:0 .4rem;}
+
+/* SECTIONS */
+.section{max-width:980px;margin:0 auto;padding:4rem 2rem;}
+.sec-header{display:flex;align-items:baseline;gap:1.5rem;border-bottom:3px solid var(--ink);padding-bottom:1rem;margin-bottom:2.5rem;}
+.sec-num{font-family:'Bebas Neue',sans-serif;font-size:5rem;line-height:1;color:var(--purple-lt);-webkit-text-stroke:1.5px var(--purple);letter-spacing:-.02em;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:2.6rem;letter-spacing:.04em;line-height:1;}
+.sec-sub{font-size:.8rem;color:rgba(13,10,20,.5);line-height:1.7;max-width:620px;margin-bottom:2rem;letter-spacing:.02em;}
+
+/* HOME CARDS */
+.home-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:3px solid var(--ink);margin-top:2rem;}
+.home-card{border-right:1.5px solid var(--ink);padding:2rem 1.6rem;transition:background .2s;cursor:pointer;}
+.home-card:last-child{border-right:none;}
+.home-card:hover{background:var(--purple-pale);}
+.home-card-label{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--purple);margin-bottom:.3rem;}
+.home-card-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;margin-bottom:.6rem;}
+.home-card-desc{font-size:.78rem;line-height:1.7;color:rgba(13,10,20,.6);}
+.home-card-arrow{margin-top:1.2rem;font-size:.72rem;letter-spacing:.1em;color:var(--purple);}
+
+/* PANEL GRID */
+.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:3px solid var(--ink);}
+.panel{border:1.5px solid var(--ink);position:relative;overflow:hidden;transition:background .2s;}
+.panel:hover{background:var(--purple-pale);}
+.panel:hover .panel-num{background:var(--purple);}
+.panel-num{position:absolute;top:0;left:0;background:var(--ink);color:var(--purple-lt);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.1em;padding:.25rem .75rem;transition:background .2s;}
+.panel-body{padding:2.5rem 1.8rem 1.6rem;}
+.panel-tag{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--purple);margin-bottom:.5rem;display:block;}
+.panel-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.04em;line-height:1.05;margin-bottom:.7rem;}
+.panel-desc{font-size:.8rem;line-height:1.7;color:rgba(13,10,20,.65);margin-bottom:1rem;}
+
+/* ACCORDION TOGGLE */
+.panel-toggle{
+  font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--purple);border:1.5px solid var(--purple);
+  padding:.4rem .9rem;cursor:pointer;background:transparent;
+  font-family:'DM Mono',monospace;transition:all .18s;display:inline-block;
+}
+.panel-toggle:hover{background:var(--purple);color:var(--white);}
+
+/* OUTPUT LIST (collapsed by default) */
+.output-list{
+  display:none;
+  border-top:1.5px solid rgba(124,92,191,.25);
+  margin-top:1rem;padding-top:1rem;
+  flex-direction:column;gap:0;
+}
+.output-list.open{display:flex;}
+.output-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.6rem 0;
+  border-bottom:1px solid rgba(13,10,20,.1);
+  cursor:pointer;
+  transition:color .15s;
+}
+.output-item:last-child{border-bottom:none;}
+.output-item:hover .out-label{color:var(--purple);}
+.output-item:hover .out-arrow{color:var(--purple);}
+.out-label{font-size:.8rem;letter-spacing:.04em;}
+.out-arrow{font-size:.75rem;color:rgba(13,10,20,.35);transition:color .15s;}
+
+/* WIDE / SOON panels */
+.panel-wide{grid-column:1/-1;}
+.panel-soon{background:var(--ink);min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.8rem;}
+.panel-soon .soon-title{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--purple-lt);letter-spacing:.08em;}
+.panel-soon .soon-sub{font-size:.78rem;color:rgba(201,184,240,.5);letter-spacing:.1em;}
+
+/* OUTPUT DETAIL PAGE */
+#page-detail .detail-wrap{max-width:780px;margin:0 auto;padding:3.5rem 2rem;}
+.detail-back{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--purple);cursor:pointer;margin-bottom:2.5rem;
+  border-bottom:1px solid transparent;transition:border-color .15s;
+}
+.detail-back:hover{border-color:var(--purple);}
+.detail-eyebrow{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--purple);margin-bottom:.5rem;}
+.detail-title{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;letter-spacing:.04em;line-height:1;margin-bottom:.6rem;}
+.detail-meta{font-size:.75rem;color:rgba(13,10,20,.45);letter-spacing:.06em;margin-bottom:2rem;padding-bottom:1.2rem;border-bottom:2px solid var(--ink);}
+.detail-content{font-size:.87rem;line-height:1.85;color:rgba(13,10,20,.75);}
+.detail-content p{margin-bottom:1rem;}
+.detail-placeholder{
+  margin-top:2rem;border:2px dashed var(--purple-lt);
+  padding:3rem 2rem;text-align:center;font-size:.8rem;
+  color:var(--purple);letter-spacing:.06em;
+  background:rgba(201,184,240,.08);
+}
+.detail-nav{display:flex;gap:.8rem;margin-top:2.5rem;padding-top:1.5rem;border-top:1.5px solid rgba(13,10,20,.1);}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:3px solid var(--ink);}
+.contact-info{border-right:3px solid var(--ink);padding:2.5rem 2rem;display:flex;flex-direction:column;gap:1.5rem;}
+.contact-item h4{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--purple);margin-bottom:.3rem;}
+.contact-item a,.contact-item p{font-size:.9rem;color:var(--ink);text-decoration:none;}
+.contact-item a:hover{color:var(--purple);}
+.contact-form{padding:2.5rem 2rem;}
+.form-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;margin-bottom:1.5rem;}
+.field{margin-bottom:1rem;}
+.field label{display:block;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--purple);margin-bottom:.35rem;}
+.field input,.field textarea{width:100%;padding:.65rem .9rem;border:2px solid var(--ink);background:var(--paper2);font-family:'DM Mono',monospace;font-size:.82rem;color:var(--ink);outline:none;resize:vertical;transition:border-color .18s,background .18s;}
+.field input:focus,.field textarea:focus{border-color:var(--purple);background:var(--white);}
+.form-success{display:none;margin-top:.8rem;padding:.7rem 1rem;background:var(--purple-pale);border:1.5px solid var(--purple);font-size:.78rem;color:var(--purple);letter-spacing:.04em;}
+
+/* ABOUT ME */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:3px solid var(--ink);margin-top:2rem;}
+.about-bio{border-right:3px solid var(--ink);padding:2.5rem 2rem;display:flex;flex-direction:column;gap:1rem;font-size:.85rem;line-height:1.8;color:rgba(13,10,20,.7);}
+.about-bio strong{color:var(--ink);}
+.about-details{padding:2.5rem 2rem;display:flex;flex-direction:column;gap:0;}
+.about-detail-item{display:flex;flex-direction:column;gap:.25rem;border-bottom:1px solid rgba(13,10,20,.1);padding:.85rem 0;}
+.about-detail-item:first-child{padding-top:0;}
+.about-detail-item:last-child{border-bottom:none;}
+.about-detail-label{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--purple);}
+.about-detail-value{font-size:.87rem;color:var(--ink);}
+@media(max-width:680px){.about-grid{grid-template-columns:1fr;}.about-bio{border-right:none;border-bottom:3px solid var(--ink);}}
+
+/* FOOTER */
+footer{background:var(--ink);border-top:3px solid var(--purple);padding:1.2rem 2.5rem;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;}
+.footer-copy{font-size:.72rem;letter-spacing:.12em;color:rgba(201,184,240,.5);text-transform:uppercase;}
+
+/* RESPONSIVE */
+@media(max-width:680px){
+  .hero{grid-template-columns:1fr;}
+  .hero-right{display:none;}
+  .panel-grid{grid-template-columns:1fr;}
+  .home-grid{grid-template-columns:1fr;}
+  .home-card{border-right:none;border-bottom:1.5px solid var(--ink);}
+  .contact-grid{grid-template-columns:1fr;}
+  .contact-info{border-right:none;border-bottom:3px solid var(--ink);}
+  .nav-links a{padding:.4rem .55rem;font-size:.65rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">✦ PORTFOLIO</div>
+  <div class="nav-links">
+    <a href="#" class="active" data-page="home">HOME</a>
+    <a href="#" data-page="midterm">MIDTERM</a>
+    <a href="#" data-page="final">FINAL</a>
+    <a href="#" data-page="contact">CONTACT</a>
+  </div>
+</nav>
+
+<!-- ══ HOME ══ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-left">
+      <div>
+        <div class="hero-eyebrow">✦ E-Portfolio — Academic Year 2025–2026</div>
+        <div class="hero-name">Marian<br><span class="accent">Peralta</span><br>Camacho</div>
+        <p class="hero-desc">Welcome to my e-portfolio! This site showcases my Midterm and Final Outputs as my Midterm Project in Object-Oriented Programming. It includes quizzes, activities, assignments, exams, as well as my understanding of the subject throughout the semester.</p>
+      </div>
+      <div>
+        <div class="hero-btns">
+          <button class="btn btn-primary" data-page="midterm">View Midterm</button>
+          <button class="btn btn-outline" data-page="final">View Final</button>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-art">
+        <div class="avatar-frame">🌸</div>
+      </div>
+      <div class="hero-info">
+        <div class="info-row"><span class="info-label">Course</span><span>COMP 20083 — Object-Oriented Programming</span></div>
+        <div class="info-row"><span class="info-label">School</span><span>Polytechnic University of The Philippines</span></div>
+        <div class="info-row"><span class="info-label">Section</span><span>BSIT 2-2N</span></div>
+        <div class="info-row" style="border:none;padding:0;"><span class="info-label">Year</span><span style="color:var(--purple)">● 2025–2026</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticker-wrap">
+    <div class="ticker-inner">
+      <span class="ticker-text">MIDTERM OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">FINAL OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">E-PORTFOLIO <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">STUDENT WORK <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">MIDTERM OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">FINAL OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">E-PORTFOLIO <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">STUDENT WORK <span class="ticker-dot">✦</span></span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-num">✦</div>
+      <div class="sec-title">ABOUT ME</div>
+    </div>
+    <p class="sec-sub">A little background on who I am, what I do, and what drives me.</p>
+    <div class="about-bio" style="border:3px solid var(--ink);margin-top:2rem;">
+        <p>Hi, I'm <strong>[Marian Camacho]</strong> — a second year student studying Information Management at Polytechnic University of the Philippines in Manila. An avid enjoyer of literature and games, I enjoy creating projects that I can implement my hobbies in.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-num">00</div>
+      <div class="sec-title">ABOUT THIS PORTFOLIO</div>
+    </div>
+    <p class="sec-sub">This portfolio reflects my development in Object Oriented Programming --- the work I've done, the lessons I've learned, and my overall understanding of the subject.</p>
+    <div class="home-grid">
+      <div class="home-card" data-page="midterm">
+        <div class="home-card-label">01</div>
+        <div class="home-card-title">MIDTERM</div>
+        <p class="home-card-desc">A collection of outputs from the first half of the semester.</p>
+        <div class="home-card-arrow">VIEW ALL →</div>
+      </div>
+      <div class="home-card" data-page="final">
+        <div class="home-card-label">02</div>
+        <div class="home-card-title">FINAL</div>
+        <p class="home-card-desc">A collection of outputs from the final half of the semester..</p>
+        <div class="home-card-arrow">VIEW ALL →</div>
+      </div>
+      <div class="home-card" data-page="contact">
+        <div class="home-card-label">03</div>
+        <div class="home-card-title">CONTACT</div>
+        <p class="home-card-desc">Connect with me!</p>
+        <div class="home-card-arrow">SAY HELLO →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MIDTERM ══ -->
+<div class="page" id="page-midterm">
+  <div class="ticker-wrap" style="border-top:none;">
+    <div class="ticker-inner">
+      <span class="ticker-text">MIDTERM OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">QUIZZES <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">ACTIVITIES <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">SEATWORK <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">ASSIGNMENT <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">MIDTERM OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">QUIZZES <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">ACTIVITIES <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">SEATWORK <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">ASSIGNMENT <span class="ticker-dot">✦</span></span>
+    </div>
+  </div>
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-num">01</div>
+      <div class="sec-title">MIDTERM OUTPUTS</div>
+    </div>
+    <p class="sec-sub">A collection of quizzes, seatwork, activities, assignments, and the midterm examination. Click a panel to expand its outputs, then click an output to view details.</p>
+    <div class="panel-grid">
+
+      <!-- QUIZZES -->
+      <div class="panel">
+        <div class="panel-num">01</div>
+        <div class="panel-body">
+          <span class="panel-tag">Evaluation</span>
+          <div class="panel-title">QUIZZES</div>
+          <p class="panel-desc">Questions, answers, and explanations covering early semester concepts.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openQuiz1()">
+              <span class="out-label">Quiz 1</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openQuiz2()">
+              <span class="out-label">Quiz 2</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEATWORK -->
+      <div class="panel">
+        <div class="panel-num">02</div>
+        <div class="panel-body">
+          <span class="panel-tag">Practice</span>
+          <div class="panel-title">SEATWORK</div>
+          <p class="panel-desc">In-class problem solving and hands-on logic exercises.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('midterm','seatwork','Seatwork 1','Practice','Midterm','Describe Seatwork 1 here. What problem did you solve? What approach did you take?')">
+              <span class="out-label">Seatwork 1</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('midterm','seatwork','Seatwork 2','Practice','Midterm','Describe Seatwork 2 here. What problem did you solve? What approach did you take?')">
+              <span class="out-label">Seatwork 2</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('midterm','seatwork','Seatwork 3','Practice','Midterm','Describe Seatwork 3 here. What problem did you solve? What approach did you take?')">
+              <span class="out-label">Seatwork 3</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVITIES -->
+      <div class="panel">
+        <div class="panel-num">03</div>
+        <div class="panel-body">
+          <span class="panel-tag">Application</span>
+          <div class="panel-title">ACTIVITIES</div>
+          <p class="panel-desc">Applied learning activities — programs, systems, and practical exercises.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('midterm','activity','Activity 1','Application','Midterm','Describe Activity 1 here. What did you build or analyze? What did you learn from it?')">
+              <span class="out-label">Activity 1</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('midterm','activity','Activity 2','Application','Midterm','Describe Activity 2 here. What did you build or analyze? What did you learn from it?')">
+              <span class="out-label">Activity 2</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('midterm','activity','Activity 3','Application','Midterm','Describe Activity 3 here. What did you build or analyze? What did you learn from it?')">
+              <span class="out-label">Activity 3</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('midterm','activity','Activity 4','Application','Midterm','Describe Activity 4 here. What did you build or analyze? What did you learn from it?')">
+              <span class="out-label">Activity 4</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('midterm','activity','Activity 5','Application','Midterm','Describe Activity 5 here. What did you build or analyze? What did you learn from it?')">
+              <span class="out-label">Activity 5</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASSIGNMENT -->
+      <div class="panel">
+        <div class="panel-num">04</div>
+        <div class="panel-body">
+          <span class="panel-tag">Work</span>
+          <div class="panel-title">ASSIGNMENT</div>
+          <p class="panel-desc">Take-home assignments exploring topics in depth beyond the classroom.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('midterm','assignment','Assignment 1','Work','Midterm','Describe Assignment 1 here. What was the task? What research or effort did you put into it?')">
+              <span class="out-label">Assignment 1</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('midterm','assignment','Assignment 2','Work','Midterm','Describe Assignment 2 here. What was the task? What research or effort did you put into it?')">
+              <span class="out-label">Assignment 2</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MIDTERM EXAM -->
+      <div class="panel panel-wide">
+        <div class="panel-num">EXAM</div>
+        <div class="panel-body">
+          <span class="panel-tag">Examination</span>
+          <div class="panel-title">MIDTERM EXAMINATION</div>
+          <p class="panel-desc">Final midterm assessment covering all topics from the first half of the semester. Includes answers, reflections, and key takeaways.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('midterm','exam','Midterm Exam','Examination','Midterm','Describe your midterm exam here. What were the key topics? How did you prepare? What was your reflection after taking it?')">
+              <span class="out-label">Midterm Exam</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ FINAL ══ -->
+<div class="page" id="page-final">
+  <div class="ticker-wrap" style="border-top:none;">
+    <div class="ticker-inner">
+      <span class="ticker-text">FINAL OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">PROJECTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">DELIVERABLES <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">FINAL OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">PROJECTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">DELIVERABLES <span class="ticker-dot">✦</span></span>
+    </div>
+  </div>
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-num">02</div>
+      <div class="sec-title">FINAL OUTPUTS</div>
+    </div>
+    <p class="sec-sub">Advanced topics and final deliverables — the culmination of everything learned and applied throughout the course.</p>
+    <div class="panel-grid">
+
+      <!-- QUIZZES -->
+      <div class="panel">
+        <div class="panel-num">01</div>
+        <div class="panel-body">
+          <span class="panel-tag">Evaluation</span>
+          <div class="panel-title">QUIZZES</div>
+          <p class="panel-desc">Advanced quiz outputs from the second half of the semester.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('final','quiz','Quiz 4','Evaluation','Final','Describe this final-period quiz here. What topics were assessed?')">
+              <span class="out-label">Quiz 4</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('final','quiz','Quiz 5','Evaluation','Final','Describe this final-period quiz here. What topics were assessed?')">
+              <span class="out-label">Quiz 5</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEATWORK -->
+      <div class="panel">
+        <div class="panel-num">02</div>
+        <div class="panel-body">
+          <span class="panel-tag">Practice</span>
+          <div class="panel-title">SEATWORK</div>
+          <p class="panel-desc">In-class exercises from the final period of the semester.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('final','seatwork','Seatwork 4','Practice','Final','Describe Seatwork 4 here. What was the focus of this exercise?')">
+              <span class="out-label">Seatwork 4</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('final','seatwork','Seatwork 5','Practice','Final','Describe Seatwork 5 here. What was the focus of this exercise?')">
+              <span class="out-label">Seatwork 5</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVITIES -->
+      <div class="panel">
+        <div class="panel-num">03</div>
+        <div class="panel-body">
+          <span class="panel-tag">Application</span>
+          <div class="panel-title">ACTIVITIES</div>
+          <p class="panel-desc">Final-period activities applying advanced concepts and skills.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('final','activity','Activity 5','Application','Final','Describe Activity 5 here. What did you create or analyze?')">
+              <span class="out-label">Activity 5</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('final','activity','Activity 6','Application','Final','Describe Activity 6 here. What did you create or analyze?')">
+              <span class="out-label">Activity 6</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASSIGNMENT -->
+      <div class="panel">
+        <div class="panel-num">04</div>
+        <div class="panel-body">
+          <span class="panel-tag">Work</span>
+          <div class="panel-title">ASSIGNMENT</div>
+          <p class="panel-desc">Final assignments demonstrating depth of understanding and application.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('final','assignment','Assignment 3','Work','Final','Describe Assignment 3 here. What was required? What did you produce?')">
+              <span class="out-label">Assignment 3</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FINAL EXAM -->
+      <div class="panel panel-wide">
+        <div class="panel-num">EXAM</div>
+        <div class="panel-body">
+          <span class="panel-tag">Examination</span>
+          <div class="panel-title">FINAL EXAMINATION</div>
+          <p class="panel-desc">Comprehensive final assessment covering all topics across the full semester. Reflection and key learnings included.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('final','exam','Final Exam','Examination','Final','Describe your final exam here. What were the key topics? What was your biggest takeaway from the course?')">
+              <span class="out-label">Final Exam</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONTACT ══ -->
+<div class="page" id="page-contact">
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-num">03</div>
+      <div class="sec-title">CONTACT ME</div>
+    </div>
+    <p class="sec-sub">The easiest way to contact me is through email! Or you can reach out to me through the following links!</p>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-item"><h4>Email</h4><a href="mailto:camachoperaltamarian@gmail.com">camachoperaltamarian@gmail.com</a></div>
+        <div class="contact-item"><h4>GitHub</h4><a href="https://github.com/MarianCamacho" target="_blank">github.com/MarianCamacho</a></div>
+        <div class="contact-item"><h4>School</h4><p>Polytechnic University of The Philippines</p></div>
+        <div class="contact-item"><h4>Course</h4><p>Bachelor of Science in Information Technology</p></div>
+      </div>
+      <div class="contact-form">
+        <div class="form-title">SEND A MESSAGE →</div>
+        <div class="field"><label>Name</label><input type="text" id="fname" placeholder="Your name"/></div>
+        <div class="field"><label>Email</label><input type="email" id="femail" placeholder="your@email.com"/></div>
+        <div class="field"><label>Message</label><textarea id="fmessage" rows="5" placeholder="Write your message here..."></textarea></div>
+        <button class="btn btn-primary" onclick="handleSend()">SEND MESSAGE →</button>
+        <div class="form-success" id="form-success">✦ Message sent! Thank you for reaching out.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ OUTPUT DETAIL PAGE ══ -->
+<div class="page" id="page-detail">
+  <div class="detail-wrap">
+    <div class="detail-back" onclick="goBack()">← BACK TO OUTPUTS</div>
+    <div class="detail-eyebrow" id="detail-eyebrow">Midterm · Evaluation</div>
+    <div class="detail-title" id="detail-title">Quiz 1</div>
+    <div class="detail-meta" id="detail-meta">Section: Quizzes · Period: Midterm</div>
+    <div id="detail-score" style="display:none;margin-bottom:1.2rem;background:var(--purple);color:var(--white);font-size:.78rem;letter-spacing:.14em;padding:.45rem 1.1rem;"></div>
+    <div class="detail-content">
+      <p id="detail-desc">Description goes here.</p>
+    </div>
+    <div id="detail-images" style="display:none;margin-top:1.5rem;"></div>
+    <div class="detail-nav">
+      <button class="btn btn-outline" onclick="goBack()">← BACK</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-copy">© Marian Peralta Camacho, 2026</div>
+</footer>
+
+<script>
+// ── Navigation ──
+const navLinks = document.querySelectorAll('[data-page]');
+const pages = document.querySelectorAll('.page');
+let prevPage = 'midterm';
+
+function showPage(id) {
+  pages.forEach(p => p.classList.remove('active'));
+  navLinks.forEach(l => l.classList.remove('active'));
+  const pg = document.getElementById('page-' + id);
+  if (pg) pg.classList.add('active');
+  document.querySelectorAll('[data-page="' + id + '"]').forEach(l => l.classList.add('active'));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+navLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    showPage(link.dataset.page);
+  });
+});
+
+// ── Toggle output list ──
+function toggleList(btn) {
+  const list = btn.nextElementSibling;
+  const isOpen = list.classList.contains('open');
+  list.classList.toggle('open');
+  btn.textContent = isOpen ? 'VIEW OUTPUTS ↓' : 'HIDE OUTPUTS ↑';
+}
+
+// ── Open detail page ──
+function openDetail(period, type, title, tag, periodLabel, desc, score, images) {
+  prevPage = period;
+  document.getElementById('detail-eyebrow').textContent = periodLabel + ' · ' + tag;
+  document.getElementById('detail-title').textContent = title;
+  document.getElementById('detail-meta').textContent = 'Section: ' + capitalise(type) + ' · Period: ' + periodLabel;
+  document.getElementById('detail-desc').innerHTML = desc;
+  var scoreBadge = document.getElementById('detail-score');
+  if (score) { scoreBadge.textContent = '✦ SCORE: ' + score; scoreBadge.style.display = 'inline-block'; }
+  else { scoreBadge.style.display = 'none'; }
+  var imgWrap = document.getElementById('detail-images');
+  imgWrap.innerHTML = '';
+  if (images && images.length) {
+    images.forEach(function(src) {
+      var img = document.createElement('img');
+      img.src = src;
+      img.style.cssText = 'max-width:100%;border:2px solid var(--ink);margin-bottom:1rem;display:block;';
+      imgWrap.appendChild(img);
+    });
+    imgWrap.style.display = 'block';
+  } else { imgWrap.style.display = 'none'; }
+  showPage('detail');
+}
+
+function goBack() {
+  showPage(prevPage);
+}
+
+function capitalise(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+
+// ── Quiz 1 detail ──
+function openQuiz1() {
+  var desc = "If I’m being honest, it’s been so long that I nearly forgot the contents of the first quiz. " +
+    "If I remember correctly, this has been done during a face-to-face class, therefore, I have no copy of the quiz. " +
+    "Programming has never been my strong suit, especially if it’s a new language that I need to learn about while juggling other subjects at the same time, " +
+    "so I wasn’t confident about taking the quiz, especially when I heard that there’ll be ‘programming’ after it. " +
+    "This was also one of our first in-person meetings with our professor, so there was also the anxiety of impressions.<br><br>" +
+    "But the contents of the quiz were almost all about definitions. It focused on concepts and history, about how ‘Oak’ was the first name of Java; " +
+    "how it focuses on the concept of ‘objects’ that contains attributes and methods; " +
+    "how its various features made it so that it’s portable, secure and simple; " +
+    "and how Java Virtual Machine, Runtime Environment, and Development Kit work together to create and run a Java Program.";
+  openDetail('midterm', 'quiz', 'Quiz 1', 'Evaluation', 'Midterm', desc, '19 / 30', [
+    'data:image/png;base64,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',
+    'data:image/png;base64,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FJ8QfvSHIaAaBImBvTqvYIAiy1rUREREREREREREREREREREREREREREREREREREIXUtHkPouyIi8zGD0H0XlLA0g+EdfurJQhEUcutE149we8Pueigd2ozTytHCeFwH3MAHdWtURB3Qc/JRu921srW+AHl/p581iV1GysgdC/j5Hmr1PO6CQPbwVcyM/wC8LNs12mtQcIomv4pWSO4jzDQ4cPzDivWtoZITgteRjOeDHVYEkR8vyXMZ4KjDZ7OycND9wpdHJFVR3GYWzGp6oNjAp4hwS8e33hxF2D/cd11bqJzXxcNDG1kJhMbQ87d2TjfrkEhal0Zzy/Jcd2f+wqP7hU/5fRe/houS29JqGSnghjbRxF0crZXPycvIJO/r4sLS44nE45legjPl+S9GRZPL8lZlqJJQA83A0VxkTWElo1Xi2PPT8l5XGpZQ0UlTKDho2GOZ6BbSCme8hrGlx9GrLksBqo8TR8TSPddDlbfA8LfWThzx+WDn19Q6/otbi1SI4S1h+MjLqPM9SpOtkkqamSolJL5HFx2XgW4Vg6i0LV0+Zrex8rOZjLCCPh5qG1FJLDIY5onxvHNrmYIX0LSVEEsYEJyHDl3L5yxGgqqSU/iBmTrwPetdwlOErLMJ8vyTuT5fksta9YwafL8l7Mj35fkvdkJJADSSfRS3TWiLpc5Wunikpacnd74zxH4BWpp44W70hsFk0tHPVv3IWkn3ryWl03Zam717KanY7hyO8fw5DB5q+tNWKCgooaeKIBjGtG8e58yU0tpyktVIyCmhDQOEucY/E4+ZKllNAGNGw5DoojiFeap1hk0aeq6fgeCNw2Pedm86nl1D3msOKgZj3G/2L09hZ+Bv9i2IaMdEwtat8sFlGwfcb/YvdkDR0H9qyMIiLo1gHQfRdwEREREREREREREREREREREREREREREREREREREREREREREREREREXDgCsWpga4DIH1WWuCERRe42xkjT4W8h94+ajlfZS1xMZY3c/eKsaVgI5lYc1Ow5yXdVj1NLDUs3JW3CuxTPhdvMNiqwnoJYzuGn4FeJp3Z91WRNRxE+8/6heHsUX4n/UKPy7KUrjdjiPArZMxmYD4gCoDHSSOdgMWxorNJK8cTmAfEqZRUUQ+8/wCoWbT07GnYuV2n2Yo4jd93dunkqJcXneLCwWjtlnijAwxmdsniK28dvjDR4W/3FbGKNoxglevCFIWMbG0NaLALWOcXG5NytFUW2NwPhby/EVornpmiq28NRSwSjH3iSp05oI6rxdE09Sqw4tNwqHMa8brhcKrKns9sz3EtphH/ALJn/uusHZ1Z2kF0Tn/GZ37K0nQt8yghb5lZP42pAtvnxWAcIoCb9C3wChlo0jaqEh1PQ07HY97LifqVJKS3sYfdbz/EVtGRtHUr0DQPNY7nuebuNys2OJkTd1jQB1ZLxgga0bAdOqyAMBcgIqVcREREREREREREREREREREREREREREREREX//Z'
+  ]);
+}
+
+
+// ── Quiz 2 detail ──
+function openQuiz2() {
+  openDetail('midterm', 'quiz', 'Quiz 2', 'Evaluation', 'Midterm',
+    'This was the most challenging activity, until the project that is. Due to the nature of the activity, we need to be certain of our answers and be able to answer all forty-five questions in the span of half an hour. Like I’ve said in the previous quiz, I have a hard time grasping languages when I’m learning more than one at the same time, so I had to study twice as hard before I took the second quiz. Thankfully, we were given more than enough time to prepare for it, hence my satisfactory result.<br><br>The quiz was about Control Flow, IO Classes, and Methods. Due to the contents of the lessons that was previously tackled beforehand, BufferedReader Class, Scanner Class, and various methods, it felt like I was using the C programming language all over again, which was a relief as I have a good grasp around that particular language.<div style="margin-top:2rem;overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.8rem;"><thead><tr style="background:#0d0a14;color:#c9b8f0;"><th style="padding:.6rem .75rem;text-align:center;font-size:.68rem;letter-spacing:.1em;">#</th><th style="padding:.6rem .75rem;text-align:left;font-size:.68rem;letter-spacing:.1em;">QUESTION</th><th style="padding:.6rem .75rem;text-align:left;font-size:.68rem;letter-spacing:.1em;">ANSWER GIVEN</th><th style="padding:.6rem .75rem;text-align:left;font-size:.68rem;letter-spacing:.1em;">TYPE</th><th style="padding:.6rem .75rem;text-align:left;font-size:.68rem;letter-spacing:.1em;">RESULT</th></tr></thead><tbody><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">1</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">If a program relies on command line input, can it still run successfully even if no arguments are provided?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">True</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">True / False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">2</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Which class is considered more primitive for input handling?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">BufferedReader</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Multiple Choice</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">3</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What class provides parsing methods like nextInt() and nextDouble()?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">Scanner</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Short Answer</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">4</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">If a program uses BufferedReader and calls readLine(), will it capture an entire sentence including spaces?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">True</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">True / False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(192,57,43,.07);">5</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What method is used to read a string from Console?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">Scanner (incorrect)</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Short Answer</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#c0392b;white-space:nowrap;">❌ Incorrect</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">6</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What method reads a full line of text in BufferedReader?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">readLine()</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Short Answer</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(192,57,43,.07);">7</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What structure receives command line inputs in the main method?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">String (incorrect)</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Short Answer</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#c0392b;white-space:nowrap;">❌ Incorrect</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">8</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">If multiple command line arguments are passed, can they be accessed using args[0], args[1]?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">True</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">True / False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">9</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Which type of input allows users to provide data through the keyboard while a program is running?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">Keyboard interaction</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Multiple Choice</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">10</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Which command compiles a Java program?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">javac filename.java</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Multiple Choice</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">11</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">If a programmer writes java MyProgram 10 20, will 10 and 20 be treated as integer types directly by the JVM?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">True / False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">12</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What is the name of the stream used for standard input in Java?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">System.in</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Short Answer</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(192,57,43,.07);">13</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What Scanner method reads double values?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">nextDouble() (incorrect)</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Short Answer</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#c0392b;white-space:nowrap;">❌ Incorrect</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(192,57,43,.07);">14</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What Scanner method reads long values?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">nextLong() (incorrect)</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Short Answer</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#c0392b;white-space:nowrap;">❌ Incorrect</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">15</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Which input method is best suited for password input without displaying characters?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">Console</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Multiple Choice</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">16</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Which is used when multiple conditions are checked sequentially?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">if-else-if</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Multiple Choice</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">17</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What is the main purpose of control flow statements in Java?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">Control execution order</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Multiple Choice</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">18</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Which statement evaluates a Boolean expression?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">if</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Multiple Choice</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">19</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Java executes code randomly.</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">True / False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">20</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Which loop checks condition after execution?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">do-while</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Multiple Choice</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">21</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">int x = 6; if(x % 2 == 0) ... What is the output?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">Even</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Code Output</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">22</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">switch can replace if-else-if.</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">True</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">True / False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">23</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Which of the following is NOT a type of control structure?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">Compilation</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Multiple Choice</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">24</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What is required for a loop to continue?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">True condition</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Multiple Choice</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">25</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Keyword that skips current iteration.</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">continue</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Short Answer</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">26</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">An if statement inside another if statement.</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">nested if statement</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Short Answer</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">27</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Control flow statements manage execution order.</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">True</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">True / False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">28</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Infinite loops never stop unless controlled.</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">True</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">True / False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">29</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What data type is NOT allowed in switch?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">float</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Short Answer</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(192,57,43,.07);">30</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What will be the output? int x = 5; if(x > 10){ System.out.println("Hi"); }</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">(no output - unanswered)</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Code Output</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#c0392b;white-space:nowrap;">❌ Incorrect</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">31</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What keyword is used when a method does not return a value?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">void</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Short Answer</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">32</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">If an array has a fixed size, can it dynamically increase without creating a new array?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">True / False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">33</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">If a method is declared as static, can it be called without creating an object?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">True</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">True / False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(192,57,43,.07);">34</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">When looping through a 1D array, is i &lt; array.length the correct condition?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">True (incorrect)</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">True / False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#c0392b;white-space:nowrap;">❌ Incorrect</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(192,57,43,.07);">35</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What is used to call or execute a method?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">name() (incorrect)</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Short Answer</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#c0392b;white-space:nowrap;">❌ Incorrect</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">36</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What keyword is used to return a value from a method?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">return</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Short Answer</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">37</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What is the output of Math.sqrt(25)?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">5</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Multiple Choice</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">38</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Will removing the inner loop of a nested loop still print all elements of a 2D array?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">True / False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">39</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Which loop is commonly used to traverse arrays?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">for</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Multiple Choice</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">40</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What method is used to find the length of a string?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">length()</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Short Answer</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">41</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Is it more efficient to place repeated logic inside a method rather than rewriting it multiple times?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">True</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">True / False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">42</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Which part of a method specifies what value it returns?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">Return type</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Multiple Choice</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">43</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What is included in a method signature?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">Method name and parameter list</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Multiple Choice</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">44</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">Should a method that only prints output be declared with a void return type?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">True</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">True / False</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr><tr><td style="text-align:center;font-weight:bold;padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);background:rgba(45,122,58,.07);">45</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;">What will the method int add(int a, int b) return?</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.78rem;font-family:monospace;">An integer result</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.72rem;color:rgba(13,10,20,.5);">Multiple Choice</td><td style="padding:.5rem .75rem;border:1px solid rgba(13,10,20,.12);font-size:.75rem;font-weight:bold;color:#2d7a3a;white-space:nowrap;">✅ Correct</td></tr></tbody></table></div>',
+    '38 / 45 · Time: 30 minutes');
+}
+
+// ── Contact form ──
+function handleSend() {
+  const name = document.getElementById('fname').value.trim();
+  const email = document.getElementById('femail').value.trim();
+  if (!name || !email) { alert('Please fill in your name and email. ✦'); return; }
+  document.getElementById('form-success').style.display = 'block';
+  const btn = document.querySelector('.contact-form .btn');
+  btn.disabled = true; btn.textContent = 'SENT ✦';
+}
+</script>
+</body>
+</html>

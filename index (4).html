@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>★ MY PORTFOLIO ★</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --p0:  #0d0818;  /* deepest bg */
+      --p1:  #160d2e;  /* dark bg panels */
+      --p2:  #1f1245;  /* card bg */
+      --p3:  #2e1b6e;  /* mid purple */
+      --p4:  #4a2fa0;  /* accent purple */
+      --p5:  #7b52d4;  /* bright purple */
+      --p6:  #a97fe8;  /* light purple */
+      --p7:  #d4b8ff;  /* lavender */
+      --p8:  #ede0ff;  /* near white */
+      --gold:   #ffd700;
+      --pink:   #ff6eb4;
+      --cyan:   #00e5ff;
+      --green:  #00ff88;
+      --white:  #ffffff;
+    }
+
+    html { scroll-behavior: smooth; image-rendering: pixelated; }
+
+    body {
+      font-family: 'Press Start 2P', monospace;
+      background: var(--p0);
+      color: var(--p8);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── SCANLINES ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 999; pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent, transparent 2px,
+        rgba(0,0,0,0.18) 2px, rgba(0,0,0,0.18) 4px
+      );
+    }
+
+    /* ── PIXEL CURSOR ── */
+    .cursor {
+      position: fixed; width: 12px; height: 12px;
+      background: var(--gold);
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      image-rendering: pixelated;
+      clip-path: polygon(0% 0%, 60% 0%, 100% 40%, 100% 100%, 40% 100%, 0% 60%);
+      transition: background 0.1s;
+    }
+    .cursor.hover { background: var(--pink); clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
+
+    /* ── STARFIELD ── */
+    #starfield {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      background: var(--p7);
+      image-rendering: pixelated;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--p1);
+      border-bottom: 4px solid var(--p4);
+      padding: 0;
+      display: flex; justify-content: space-between; align-items: stretch;
+    }
+
+    /* pixel corner decoration */
+    nav::before {
+      content: '';
+      position: absolute; bottom: -8px; left: 0; right: 0; height: 4px;
+      background: repeating-linear-gradient(90deg, var(--p5) 0px, var(--p5) 8px, transparent 8px, transparent 16px);
+    }
+
+    .nav-logo {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.6rem; color: var(--gold);
+      padding: 1.1rem 1.5rem;
+      text-shadow: 2px 2px 0 var(--p3);
+      letter-spacing: 0.05em;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    .nav-logo::before { content: '▶'; color: var(--pink); font-size: 0.5rem; }
+
+    .nav-links { display: flex; list-style: none; }
+
+    .nav-links a {
+      display: flex; align-items: center;
+      padding: 0 1.2rem;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.45rem; letter-spacing: 0.05em;
+      color: var(--p7); text-decoration: none;
+      border-left: 2px solid var(--p3);
+      transition: background 0.1s, color 0.1s;
+      text-transform: uppercase;
+    }
+
+    .nav-links a:hover {
+      background: var(--p3); color: var(--gold);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 5rem 2rem 4rem;
+      position: relative; overflow: hidden;
+      background: linear-gradient(180deg, var(--p0) 0%, var(--p1) 60%, var(--p2) 100%);
+    }
+
+    /* pixel ground strip at bottom */
+    .hero::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 16px;
+      background: repeating-linear-gradient(90deg, var(--p3) 0px, var(--p3) 8px, var(--p4) 8px, var(--p4) 16px);
+    }
+
+    .hero-inner {
+      position: relative; z-index: 2;
+      text-align: center; max-width: 720px;
+    }
+
+    /* 8-bit style character sprite box */
+    .sprite-box {
+      width: 96px; height: 96px;
+      background: var(--p2);
+      border: 4px solid var(--p6);
+      margin: 0 auto 2rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem;
+      image-rendering: pixelated;
+      position: relative;
+      box-shadow:
+        0 0 0 4px var(--p4),
+        0 0 0 8px var(--p3),
+        8px 8px 0 8px var(--p1);
+      animation: sprite-bob 1s steps(2) infinite;
+    }
+
+    @keyframes sprite-bob {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-4px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* blinking HP bar style tag */
+    .hero-tag {
+      font-size: 0.5rem; color: var(--cyan);
+      letter-spacing: 0.15em; margin-bottom: 1.5rem;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    }
+
+    .blink { animation: blink 1s steps(1) infinite; }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+    .hero h1 {
+      font-size: clamp(1rem, 3.5vw, 1.8rem);
+      line-height: 1.6; color: var(--p8);
+      text-shadow: 3px 3px 0 var(--p3), 6px 6px 0 rgba(0,0,0,0.4);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h1 .name {
+      color: var(--gold);
+      text-shadow: 3px 3px 0 #b8860b, 6px 6px 0 rgba(0,0,0,0.4);
+      display: block; margin-top: 0.4rem;
+    }
+
+    /* pixel bar under name */
+    .pixel-bar {
+      height: 8px; width: 200px; margin: 1.2rem auto;
+      background: repeating-linear-gradient(90deg, var(--p4) 0px, var(--p4) 8px, var(--p5) 8px, var(--p5) 16px);
+    }
+
+    .hero-sub {
+      font-family: 'VT323', monospace;
+      font-size: 1.35rem; color: var(--p7); line-height: 1.7;
+      margin-bottom: 2.5rem; max-width: 500px; margin-left: auto; margin-right: auto;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* NES-style button */
+    .btn {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.5rem; letter-spacing: 0.05em;
+      padding: 0.9rem 1.6rem;
+      text-decoration: none; display: inline-block;
+      border: none; cursor: none;
+      position: relative; text-transform: uppercase;
+      transition: transform 0.05s;
+    }
+
+    .btn:active { transform: translate(4px, 4px); }
+
+    .btn-gold {
+      background: var(--gold); color: var(--p0);
+      box-shadow: 4px 4px 0 #7a6000, 8px 8px 0 rgba(0,0,0,0.4);
+    }
+    .btn-gold:hover { box-shadow: 2px 2px 0 #7a6000, 4px 4px 0 rgba(0,0,0,0.4); transform: translate(2px,2px); }
+
+    .btn-pink {
+      background: var(--pink); color: var(--p0);
+      box-shadow: 4px 4px 0 #8b003e, 8px 8px 0 rgba(0,0,0,0.4);
+    }
+    .btn-pink:hover { box-shadow: 2px 2px 0 #8b003e, 4px 4px 0 rgba(0,0,0,0.4); transform: translate(2px,2px); }
+
+    /* ── SECTION WRAPPER ── */
+    .section-wrap {
+      position: relative; z-index: 1;
+      padding: 5rem 2rem;
+    }
+
+    .section-wrap:nth-child(odd) { background: var(--p1); }
+    .section-wrap:nth-child(even){ background: var(--p0); }
+
+    /* pixel top border */
+    .section-wrap::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 8px;
+      background: repeating-linear-gradient(90deg, var(--p4) 0px, var(--p4) 8px, var(--p3) 8px, var(--p3) 16px);
+    }
+
+    .section-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+
+    /* RPG-style section header box */
+    .section-header {
+      border: 4px solid var(--p5);
+      background: var(--p2);
+      padding: 1rem 1.5rem;
+      margin-bottom: 2.5rem;
+      display: inline-block;
+      position: relative;
+      box-shadow: 6px 6px 0 var(--p3);
+    }
+
+    .section-header::before {
+      content: '';
+      position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px;
+      border: 2px solid var(--p4);
+      pointer-events: none;
+    }
+
+    .section-eyebrow {
+      font-size: 0.4rem; color: var(--cyan);
+      letter-spacing: 0.2em; margin-bottom: 0.6rem;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .section-eyebrow::before { content: '■'; color: var(--p5); }
+
+    .section-title {
+      font-size: clamp(0.8rem, 2.5vw, 1.3rem);
+      line-height: 1.4; text-shadow: 3px 3px 0 var(--p3);
+    }
+
+    .section-desc {
+      font-family: 'VT323', monospace;
+      font-size: 1.2rem; color: var(--p7); line-height: 1.8;
+      max-width: 500px; margin-bottom: 2.5rem;
+    }
+
+    /* pixel divider */
+    .px-divider {
+      height: 8px; margin-bottom: 2.5rem;
+      background: repeating-linear-gradient(90deg, var(--p5) 0px, var(--p5) 4px, transparent 4px, transparent 8px);
+      opacity: 0.5;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+
+    @media (max-width: 750px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      nav { flex-wrap: wrap; }
+      .nav-links a { padding: 0 0.8rem; font-size: 0.38rem; }
+      .hero h1 { font-size: 0.9rem; }
+    }
+
+    .about-text p {
+      font-family: 'VT323', monospace;
+      font-size: 1.2rem; color: var(--p7); line-height: 1.9; margin-bottom: 1rem;
+    }
+
+    /* RPG stat window */
+    .stat-window {
+      border: 4px solid var(--p5); background: var(--p2);
+      padding: 1.2rem; box-shadow: 6px 6px 0 var(--p3);
+    }
+
+    .stat-window-title {
+      font-size: 0.45rem; color: var(--gold); margin-bottom: 1rem;
+      border-bottom: 2px solid var(--p4); padding-bottom: 0.5rem;
+      letter-spacing: 0.1em;
+    }
+
+    .stat-row-item {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.8rem; gap: 1rem;
+    }
+
+    .stat-name {
+      font-size: 0.4rem; color: var(--p7); white-space: nowrap;
+    }
+
+    /* pixel progress bar */
+    .stat-bar-wrap {
+      flex: 1; height: 12px; background: var(--p1);
+      border: 2px solid var(--p4); position: relative;
+    }
+
+    .stat-bar {
+      height: 100%; position: absolute; top: 0; left: 0;
+      background: repeating-linear-gradient(90deg, var(--p5) 0px, var(--p5) 6px, var(--p6) 6px, var(--p6) 8px);
+      animation: fill-bar 1.5s ease forwards;
+    }
+
+    @keyframes fill-bar { from { width: 0; } }
+
+    .stat-val {
+      font-size: 0.4rem; color: var(--cyan); white-space: nowrap; min-width: 2rem; text-align: right;
+    }
+
+    /* skill chips */
+    .skill-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
+
+    .skill-chip {
+      font-size: 0.38rem; padding: 0.4rem 0.8rem;
+      border: 2px solid var(--p5); color: var(--p7); background: var(--p2);
+      transition: border-color 0.1s, color 0.1s, background 0.1s;
+      letter-spacing: 0.05em;
+    }
+
+    .skill-chip:hover { border-color: var(--gold); color: var(--gold); background: var(--p3); }
+
+    /* ── PROJECT CARDS ── */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.5rem; }
+
+    .project-card {
+      background: var(--p2);
+      border: 4px solid var(--p4);
+      display: block; text-decoration: none; color: inherit;
+      position: relative;
+      box-shadow: 6px 6px 0 var(--p1);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    .project-card:hover {
+      transform: translate(-4px, -4px);
+      box-shadow: 10px 10px 0 var(--p1);
+      border-color: var(--p6);
+    }
+
+    /* pixel corner decorations */
+    .project-card::before, .project-card::after {
+      content: '';
+      position: absolute;
+      width: 8px; height: 8px;
+      background: var(--p5);
+    }
+    .project-card::before { top: -4px; right: -4px; }
+    .project-card::after  { bottom: -4px; left: -4px; }
+
+    .project-thumb {
+      height: 130px; display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+      border-bottom: 4px solid var(--p4);
+      position: relative; overflow: hidden;
+    }
+
+    /* scanlines on thumb */
+    .project-thumb::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.2) 3px, rgba(0,0,0,0.2) 4px);
+      pointer-events: none;
+    }
+
+    .project-body { padding: 1rem; }
+
+    .project-type {
+      font-size: 0.35rem; letter-spacing: 0.12em; margin-bottom: 0.5rem;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+
+    .project-type::before { content: '▶'; font-size: 0.3rem; }
+
+    .type-midterm  { color: var(--pink); }
+    .type-final    { color: var(--cyan); }
+    .type-lab      { color: var(--gold); }
+    .type-activity { color: var(--green); }
+
+    .project-title {
+      font-size: 0.55rem; color: var(--p8); margin-bottom: 0.7rem;
+      line-height: 1.6; text-shadow: 2px 2px 0 var(--p3);
+    }
+
+    .project-desc {
+      font-family: 'VT323', monospace;
+      font-size: 1.1rem; color: var(--p7); line-height: 1.7; margin-bottom: 0.8rem;
+    }
+
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.8rem; }
+
+    .project-tag {
+      font-size: 0.3rem; padding: 0.2rem 0.5rem;
+      border: 2px solid var(--p4); color: var(--p6); background: var(--p1);
+    }
+
+    .project-link {
+      font-size: 0.38rem; color: var(--gold);
+      text-decoration: none; letter-spacing: 0.08em;
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      transition: gap 0.1s, color 0.1s;
+    }
+
+    .project-link::before { content: '→'; }
+    .project-link:hover { gap: 0.6rem; color: var(--pink); }
+
+    /* ── CONTACT ── */
+    .contact-wrap {
+      padding: 5rem 2rem; background: var(--p0);
+      text-align: center; position: relative; overflow: hidden;
+    }
+
+    .contact-wrap::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 8px;
+      background: repeating-linear-gradient(90deg, var(--p4) 0px, var(--p4) 8px, var(--p3) 8px, var(--p3) 16px);
+    }
+
+    /* big pixel decoration circles */
+    .px-ring {
+      position: absolute; border-radius: 0;
+      border: 8px solid var(--p3);
+      pointer-events: none; opacity: 0.3;
+    }
+
+    .contact-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+
+    .contact-sub {
+      font-family: 'VT323', monospace;
+      font-size: 1.3rem; color: var(--p7); line-height: 1.8; margin-bottom: 2rem;
+    }
+
+    /* dialogue box style */
+    .dialogue-box {
+      border: 4px solid var(--p5); background: var(--p2);
+      padding: 1.5rem; margin-bottom: 2.5rem;
+      text-align: left; position: relative;
+      box-shadow: 6px 6px 0 var(--p3);
+    }
+
+    .dialogue-box::before {
+      content: '★ MESSAGE';
+      position: absolute; top: -0.9rem; left: 1rem;
+      font-size: 0.35rem; background: var(--p2);
+      padding: 0 0.5rem; color: var(--cyan); letter-spacing: 0.1em;
+    }
+
+    .dialogue-text {
+      font-family: 'VT323', monospace;
+      font-size: 1.3rem; color: var(--p8); line-height: 1.9;
+    }
+
+    .dialogue-cursor {
+      display: inline-block; width: 10px; height: 16px;
+      background: var(--p8); margin-left: 4px; vertical-align: middle;
+      animation: blink 0.8s steps(1) infinite;
+    }
+
+    .mood-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 2.5rem; }
+
+    .mood-chip {
+      font-size: 0.35rem; padding: 0.4rem 0.8rem;
+      border: 2px solid; letter-spacing: 0.08em;
+    }
+
+    .mood-chip:nth-child(1) { border-color: var(--pink);  color: var(--pink); }
+    .mood-chip:nth-child(2) { border-color: var(--cyan);  color: var(--cyan); }
+    .mood-chip:nth-child(3) { border-color: var(--gold);  color: var(--gold); }
+    .mood-chip:nth-child(4) { border-color: var(--green); color: var(--green); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--p0); border-top: 4px solid var(--p3);
+      text-align: center; padding: 1.5rem;
+      position: relative;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute; top: -8px; left: 0; right: 0; height: 4px;
+      background: repeating-linear-gradient(90deg, var(--p5) 0px, var(--p5) 4px, transparent 4px, transparent 8px);
+    }
+
+    footer p {
+      font-family: 'VT323', monospace;
+      font-size: 1rem; color: var(--p6); letter-spacing: 0.08em;
+    }
+
+    footer strong { color: var(--gold); }
+
+    /* ── FADE UP ── */
+    .fade-up { opacity: 0; transform: translateY(16px); transition: opacity 0.5s, transform 0.5s; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── HERO ENTRY ── */
+    @keyframes px-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .px-in-1 { animation: px-in 0.3s steps(4) 0.1s both; }
+    .px-in-2 { animation: px-in 0.3s steps(4) 0.3s both; }
+    .px-in-3 { animation: px-in 0.3s steps(4) 0.5s both; }
+    .px-in-4 { animation: px-in 0.3s steps(4) 0.7s both; }
+    .px-in-5 { animation: px-in 0.3s steps(4) 0.9s both; }
+
+    /* live XP ticker */
+    .xp-bar-wrap {
+      display: flex; align-items: center; gap: 0.6rem;
+      margin-bottom: 1.5rem; justify-content: center;
+    }
+    .xp-label { font-size: 0.4rem; color: var(--green); }
+    .xp-track {
+      width: 160px; height: 10px;
+      background: var(--p1); border: 2px solid var(--p4);
+    }
+    .xp-fill {
+      height: 100%;
+      background: repeating-linear-gradient(90deg, var(--green) 0px, var(--green) 4px, #00cc77 4px, #00cc77 8px);
+      width: 72%;
+      animation: fill-bar 2s ease forwards;
+    }
+    .xp-num { font-size: 0.35rem; color: var(--green); }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+
+  <!-- PIXEL STARFIELD -->
+  <div id="starfield"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">MY PORTFOLIO</div>
+    <ul class="nav-links">
+      <li><a href="#home">HOME</a></li>
+      <li><a href="#midterm">MIDTERM</a></li>
+      <li><a href="#final">FINAL</a></li>
+      <li><a href="#contact">CONTACT</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero" id="home">
+    <div class="hero-inner">
+      <div class="sprite-box px-in-1">🎮</div>
+
+      <div class="hero-tag px-in-2">
+        <span class="blink">★</span> PLAYER ONE HAS ENTERED <span class="blink">★</span>
+      </div>
+
+      <h1 class="px-in-3">
+        HELLO, I'M
+        <span class="name">YOUR NAME!</span>
+      </h1>
+
+      <div class="pixel-bar px-in-3"></div>
+
+      <div class="xp-bar-wrap px-in-4">
+        <span class="xp-label">SEMESTER XP</span>
+        <div class="xp-track"><div class="xp-fill"></div></div>
+        <span class="xp-num">720 / 1000</span>
+      </div>
+
+      <p class="hero-sub px-in-4">
+        A collection of quests completed this semester.<br/>
+        Each project: a boss defeated, a skill unlocked.
+      </p>
+
+      <div class="hero-actions px-in-5">
+        <a href="#midterm" class="btn btn-gold">▶ MIDTERM</a>
+        <a href="#final"   class="btn btn-pink">▶ FINAL</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="section-wrap" id="about">
+    <div class="section-inner">
+      <div class="section-header fade-up">
+        <div class="section-eyebrow">CHARACTER INFO</div>
+        <div class="section-title" style="color:var(--p7);">ABOUT ME</div>
+      </div>
+      <div class="about-grid">
+        <div class="fade-up">
+          <div class="about-text">
+            <p>HELLO! I AM A STUDENT CURRENTLY TAKING A PROGRAMMING CLASS.</p>
+            <p>THIS PORTFOLIO IS A COLLECTION OF EVERYTHING I BUILT THIS SEMESTER — FROM EARLY SIDE QUESTS TO THE FINAL BOSS.</p>
+            <p>EVERY PROJECT HERE IS A SKILL I LEVELED UP. I AM PROUD OF HOW FAR I HAVE COME!</p>
+          </div>
+          <div class="skill-chips" style="margin-top:1.5rem;">
+            <span class="skill-chip">HTML</span>
+            <span class="skill-chip">CSS</span>
+            <span class="skill-chip">JAVASCRIPT</span>
+            <span class="skill-chip">PYTHON</span>
+            <span class="skill-chip">GIT</span>
+            <span class="skill-chip">GITHUB</span>
+          </div>
+        </div>
+
+        <div class="fade-up" style="transition-delay:0.1s;">
+          <div class="stat-window">
+            <div class="stat-window-title">★ PLAYER STATS</div>
+
+            <div class="stat-row-item">
+              <span class="stat-name">PROJECTS</span>
+              <div class="stat-bar-wrap"><div class="stat-bar" style="width:85%"></div></div>
+              <span class="stat-val">5+</span>
+            </div>
+            <div class="stat-row-item">
+              <span class="stat-name">LOGIC</span>
+              <div class="stat-bar-wrap"><div class="stat-bar" style="width:70%;animation-delay:0.2s"></div></div>
+              <span class="stat-val">70</span>
+            </div>
+            <div class="stat-row-item">
+              <span class="stat-name">CREATIVITY</span>
+              <div class="stat-bar-wrap"><div class="stat-bar" style="width:90%;animation-delay:0.4s"></div></div>
+              <span class="stat-val">90</span>
+            </div>
+            <div class="stat-row-item">
+              <span class="stat-name">PERSISTENCE</span>
+              <div class="stat-bar-wrap"><div class="stat-bar" style="width:95%;animation-delay:0.6s"></div></div>
+              <span class="stat-val">95</span>
+            </div>
+            <div class="stat-row-item">
+              <span class="stat-name">DEBUG SPD</span>
+              <div class="stat-bar-wrap"><div class="stat-bar" style="width:60%;animation-delay:0.8s"></div></div>
+              <span class="stat-val">60</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MIDTERM -->
+  <section class="section-wrap" id="midterm">
+    <div class="section-inner">
+      <div class="section-header fade-up" style="border-color:var(--pink);">
+        <div class="section-eyebrow" style="color:var(--pink);">STAGE 1</div>
+        <div class="section-title" style="color:var(--pink);">MIDTERM</div>
+      </div>
+      <p class="section-desc fade-up">PROJECTS AND QUESTS COMPLETED BEFORE THE MIDTERM BOSS. CLICK ANY CARD TO VIEW ON GITHUB.</p>
+      <div class="px-divider fade-up"></div>
+      <div class="projects-grid">
+
+        <a href="https://github.com/yourusername/midterm-project" target="_blank" class="project-card fade-up">
+          <div class="project-thumb" style="background:linear-gradient(180deg,#2d0a1e,#4a1535);">🌹</div>
+          <div class="project-body">
+            <div class="project-type type-midterm">MIDTERM OUTPUT</div>
+            <h3 class="project-title">MIDTERM PROJECT</h3>
+            <p class="project-desc">Describe what your midterm project does and what you learned. Replace with your real content!</p>
+            <div class="project-tags"><span class="project-tag">HTML</span><span class="project-tag">CSS</span><span class="project-tag">JS</span></div>
+            <span class="project-link">VIEW ON GITHUB</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/yourusername/lab-1" target="_blank" class="project-card fade-up" style="transition-delay:0.05s;">
+          <div class="project-thumb" style="background:linear-gradient(180deg,#0a1a2d,#153045);">🔭</div>
+          <div class="project-body">
+            <div class="project-type type-lab">LABORATORY</div>
+            <h3 class="project-title">LAB EXERCISE 1</h3>
+            <p class="project-desc">Describe what this lab was about and what concepts it helped you practice.</p>
+            <div class="project-tags"><span class="project-tag">VARIABLES</span><span class="project-tag">BASICS</span></div>
+            <span class="project-link">VIEW ON GITHUB</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/yourusername/activity-1" target="_blank" class="project-card fade-up" style="transition-delay:0.10s;">
+          <div class="project-thumb" style="background:linear-gradient(180deg,#1a0a2d,#2d1545);">📐</div>
+          <div class="project-body">
+            <div class="project-type type-activity">ACTIVITY</div>
+            <h3 class="project-title">ACTIVITY 1</h3>
+            <p class="project-desc">What was this activity about? What did you build or practice? Add your description!</p>
+            <div class="project-tags"><span class="project-tag">LOOPS</span><span class="project-tag">CONDITIONS</span></div>
+            <span class="project-link">VIEW ON GITHUB</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL -->
+  <section class="section-wrap" id="final">
+    <div class="section-inner">
+      <div class="section-header fade-up" style="border-color:var(--cyan);">
+        <div class="section-eyebrow" style="color:var(--cyan);">STAGE 2 — FINAL BOSS</div>
+        <div class="section-title" style="color:var(--cyan);">FINAL</div>
+      </div>
+      <p class="section-desc fade-up">MY MOST POWERFUL BUILDS — COMPLETED TOWARDS THE END OF THE SEMESTER. CLICK ANY CARD TO VIEW ON GITHUB.</p>
+      <div class="px-divider fade-up"></div>
+      <div class="projects-grid">
+
+        <a href="https://github.com/yourusername/final-project" target="_blank" class="project-card fade-up">
+          <div class="project-thumb" style="background:linear-gradient(180deg,#0a1a2d,#0a2a45);">🌊</div>
+          <div class="project-body">
+            <div class="project-type type-final">FINAL OUTPUT</div>
+            <h3 class="project-title">FINAL PROJECT</h3>
+            <p class="project-desc">Your most polished work! Describe what your final project is and the technologies used.</p>
+            <div class="project-tags"><span class="project-tag">PYTHON</span><span class="project-tag">DATA</span></div>
+            <span class="project-link">VIEW ON GITHUB</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/yourusername/lab-2" target="_blank" class="project-card fade-up" style="transition-delay:0.05s;">
+          <div class="project-thumb" style="background:linear-gradient(180deg,#1a1a0a,#2d2d0a);">⚡</div>
+          <div class="project-body">
+            <div class="project-type type-lab">LABORATORY</div>
+            <h3 class="project-title">LAB EXERCISE 2</h3>
+            <p class="project-desc">Describe this lab — functions, arrays, or something else you were working on.</p>
+            <div class="project-tags"><span class="project-tag">FUNCTIONS</span><span class="project-tag">ARRAYS</span></div>
+            <span class="project-link">VIEW ON GITHUB</span>
+          </div>
+        </a>
+
+        <a href="https://github.com/yourusername/extra" target="_blank" class="project-card fade-up" style="transition-delay:0.10s;">
+          <div class="project-thumb" style="background:linear-gradient(180deg,#1a0a1a,#2d0a2d);">💡</div>
+          <div class="project-body">
+            <div class="project-type type-activity">BONUS STAGE</div>
+            <h3 class="project-title">EXTRA PROJECT</h3>
+            <p class="project-desc">Got an extra project or creative exercise? Add it here for bonus XP!</p>
+            <div class="project-tags"><span class="project-tag">CREATIVE</span><span class="project-tag">EXTRA</span></div>
+            <span class="project-link">VIEW ON GITHUB</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <div class="contact-wrap" id="contact">
+    <div class="px-ring" style="width:200px;height:200px;top:-60px;left:-60px;"></div>
+    <div class="px-ring" style="width:140px;height:140px;bottom:-40px;right:-40px;"></div>
+    <div class="contact-inner">
+      <div class="section-header fade-up" style="border-color:var(--gold);margin-bottom:1.5rem;">
+        <div class="section-eyebrow" style="color:var(--gold);">NEW MESSAGE</div>
+        <div class="section-title" style="color:var(--gold);">CONTACT</div>
+      </div>
+
+      <div class="dialogue-box fade-up">
+        <p class="dialogue-text">
+          FEEL FREE TO REACH OUT IF YOU WANT TO KNOW MORE ABOUT MY PROJECTS — OR JUST WANT TO SAY HI!<span class="dialogue-cursor"></span>
+        </p>
+      </div>
+
+      <div class="mood-row fade-up">
+        <span class="mood-chip">HAPPY</span>
+        <span class="mood-chip">CURIOUS</span>
+        <span class="mood-chip">CREATIVE</span>
+        <span class="mood-chip">DETERMINED</span>
+      </div>
+
+      <a href="mailto:youremail@example.com" class="btn btn-gold fade-up">▶ SEND MESSAGE</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>★ MADE BY <strong>YOUR NAME</strong> · PROGRAMMING CLASS PORTFOLIO · 2025 ★</p>
+  </footer>
+
+  <script>
+    // Pixel cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('a,button').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+
+    // Pixel starfield — 2x2 and 4x4 pixel stars
+    const sf = document.getElementById('starfield');
+    const starColors = ['#d4b8ff','#a97fe8','#7b52d4','#ede0ff','#4a2fa0'];
+    for (let i = 0; i < 120; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() < 0.7 ? 2 : 4;
+      s.style.cssText = `
+        width:${size}px; height:${size}px;
+        top:${Math.random()*100}%;
+        left:${Math.random()*100}%;
+        background:${starColors[Math.floor(Math.random()*starColors.length)]};
+        opacity:${(Math.random()*0.5+0.2).toFixed(2)};
+        animation: blink ${(Math.random()*3+1.5).toFixed(1)}s steps(1) ${(Math.random()*2).toFixed(1)}s infinite;
+      `;
+      sf.appendChild(s);
+    }
+
+    // Scroll fade-up
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>

@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My E-Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0d0a14;
+  --paper:#f5f0e8;
+  --paper2:#ede7d9;
+  --purple:#7c5cbf;
+  --purple-lt:#c9b8f0;
+  --purple-pale:#ede8fc;
+  --white:#ffffff;
+}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'DM Mono',monospace;cursor:crosshair;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(124,92,191,.12) 1px,transparent 1px);background-size:18px 18px;pointer-events:none;z-index:0;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--ink);border-bottom:3px solid var(--purple-lt);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:58px;}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.08em;color:var(--purple-lt);}
+.nav-links{display:flex;gap:.2rem;}
+.nav-links a{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--paper);text-decoration:none;padding:.45rem 1rem;border:1.5px solid transparent;transition:all .18s;}
+.nav-links a:hover,.nav-links a.active{border-color:var(--purple-lt);color:var(--purple-lt);background:rgba(201,184,240,.08);}
+
+/* PAGES */
+.page{display:none;padding-top:58px;min-height:100vh;position:relative;z-index:1;}
+.page.active{display:block;animation:pagein .35s ease;}
+@keyframes pagein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 58px);border-bottom:3px solid var(--ink);}
+.hero-left{border-right:3px solid var(--ink);padding:3.5rem 3rem;display:flex;flex-direction:column;justify-content:space-between;background:var(--ink);position:relative;overflow:hidden;}
+.hero-left::after{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(201,184,240,.18) 1.5px,transparent 1.5px);background-size:14px 14px;pointer-events:none;}
+.hero-eyebrow{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--purple-lt);border-bottom:1px solid rgba(201,184,240,.3);padding-bottom:.6rem;margin-bottom:2rem;position:relative;z-index:1;}
+.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,8vw,7rem);line-height:.92;color:var(--white);position:relative;z-index:1;}
+.hero-name .accent{color:transparent;-webkit-text-stroke:2px var(--purple-lt);}
+.hero-desc{font-size:.82rem;line-height:1.75;color:rgba(245,240,232,.65);margin-top:2rem;max-width:340px;position:relative;z-index:1;}
+.hero-btns{display:flex;gap:.7rem;margin-top:2.5rem;flex-wrap:wrap;position:relative;z-index:1;}
+.btn{font-family:'DM Mono',monospace;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;padding:.65rem 1.5rem;cursor:pointer;border:2px solid;text-decoration:none;display:inline-block;transition:all .2s;}
+.btn-primary{background:var(--purple-lt);color:var(--ink);border-color:var(--purple-lt);}
+.btn-primary:hover{background:var(--purple);color:var(--white);border-color:var(--purple);}
+.btn-outline{background:transparent;color:var(--purple-lt);border-color:var(--purple-lt);}
+.btn-outline:hover{background:var(--purple-lt);color:var(--ink);}
+.hero-right{display:grid;grid-template-rows:1fr auto;}
+.hero-art{display:flex;align-items:center;justify-content:center;background:var(--purple-pale);border-bottom:3px solid var(--ink);padding:3rem 2rem;position:relative;overflow:hidden;min-height:320px;}
+.hero-art::before{content:'';position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 50% 50%,transparent 0deg,transparent 8.5deg,rgba(124,92,191,.07) 8.5deg,rgba(124,92,191,.07) 9deg);pointer-events:none;}
+.avatar-frame{width:190px;height:190px;border-radius:50%;border:4px solid var(--ink);background:linear-gradient(135deg,var(--purple-lt),var(--purple));display:flex;align-items:center;justify-content:center;font-size:4.5rem;box-shadow:6px 6px 0 var(--ink);position:relative;z-index:1;}
+.hero-info{padding:1.6rem 2rem;display:flex;flex-direction:column;gap:.55rem;}
+.info-row{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(13,10,20,.13);padding-bottom:.5rem;font-size:.78rem;}
+.info-label{color:var(--purple);letter-spacing:.1em;text-transform:uppercase;font-size:.66rem;}
+
+/* TICKER */
+.ticker-wrap{overflow:hidden;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);background:var(--purple);padding:.6rem 0;}
+.ticker-inner{display:flex;white-space:nowrap;animation:ticker 22s linear infinite;}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-text{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.15em;color:var(--purple-pale);padding:0 2rem;}
+.ticker-dot{color:var(--purple-lt);margin:0 .4rem;}
+
+/* SECTIONS */
+.section{max-width:980px;margin:0 auto;padding:4rem 2rem;}
+.sec-header{display:flex;align-items:baseline;gap:1.5rem;border-bottom:3px solid var(--ink);padding-bottom:1rem;margin-bottom:2.5rem;}
+.sec-num{font-family:'Bebas Neue',sans-serif;font-size:5rem;line-height:1;color:var(--purple-lt);-webkit-text-stroke:1.5px var(--purple);letter-spacing:-.02em;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:2.6rem;letter-spacing:.04em;line-height:1;}
+.sec-sub{font-size:.8rem;color:rgba(13,10,20,.5);line-height:1.7;max-width:620px;margin-bottom:2rem;letter-spacing:.02em;}
+
+/* HOME CARDS */
+.home-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:3px solid var(--ink);margin-top:2rem;}
+.home-card{border-right:1.5px solid var(--ink);padding:2rem 1.6rem;transition:background .2s;cursor:pointer;}
+.home-card:last-child{border-right:none;}
+.home-card:hover{background:var(--purple-pale);}
+.home-card-label{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--purple);margin-bottom:.3rem;}
+.home-card-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.04em;margin-bottom:.6rem;}
+.home-card-desc{font-size:.78rem;line-height:1.7;color:rgba(13,10,20,.6);}
+.home-card-arrow{margin-top:1.2rem;font-size:.72rem;letter-spacing:.1em;color:var(--purple);}
+
+/* PANEL GRID */
+.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:3px solid var(--ink);}
+.panel{border:1.5px solid var(--ink);position:relative;overflow:hidden;transition:background .2s;}
+.panel:hover{background:var(--purple-pale);}
+.panel:hover .panel-num{background:var(--purple);}
+.panel-num{position:absolute;top:0;left:0;background:var(--ink);color:var(--purple-lt);font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.1em;padding:.25rem .75rem;transition:background .2s;}
+.panel-body{padding:2.5rem 1.8rem 1.6rem;}
+.panel-tag{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--purple);margin-bottom:.5rem;display:block;}
+.panel-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.04em;line-height:1.05;margin-bottom:.7rem;}
+.panel-desc{font-size:.8rem;line-height:1.7;color:rgba(13,10,20,.65);margin-bottom:1rem;}
+
+/* ACCORDION TOGGLE */
+.panel-toggle{
+  font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--purple);border:1.5px solid var(--purple);
+  padding:.4rem .9rem;cursor:pointer;background:transparent;
+  font-family:'DM Mono',monospace;transition:all .18s;display:inline-block;
+}
+.panel-toggle:hover{background:var(--purple);color:var(--white);}
+
+/* OUTPUT LIST (collapsed by default) */
+.output-list{
+  display:none;
+  border-top:1.5px solid rgba(124,92,191,.25);
+  margin-top:1rem;padding-top:1rem;
+  flex-direction:column;gap:0;
+}
+.output-list.open{display:flex;}
+.output-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.6rem 0;
+  border-bottom:1px solid rgba(13,10,20,.1);
+  cursor:pointer;
+  transition:color .15s;
+}
+.output-item:last-child{border-bottom:none;}
+.output-item:hover .out-label{color:var(--purple);}
+.output-item:hover .out-arrow{color:var(--purple);}
+.out-label{font-size:.8rem;letter-spacing:.04em;}
+.out-arrow{font-size:.75rem;color:rgba(13,10,20,.35);transition:color .15s;}
+
+/* WIDE / SOON panels */
+.panel-wide{grid-column:1/-1;}
+.panel-soon{background:var(--ink);min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.8rem;}
+.panel-soon .soon-title{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--purple-lt);letter-spacing:.08em;}
+.panel-soon .soon-sub{font-size:.78rem;color:rgba(201,184,240,.5);letter-spacing:.1em;}
+
+/* OUTPUT DETAIL PAGE */
+#page-detail .detail-wrap{max-width:780px;margin:0 auto;padding:3.5rem 2rem;}
+.detail-back{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--purple);cursor:pointer;margin-bottom:2.5rem;
+  border-bottom:1px solid transparent;transition:border-color .15s;
+}
+.detail-back:hover{border-color:var(--purple);}
+.detail-eyebrow{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--purple);margin-bottom:.5rem;}
+.detail-title{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;letter-spacing:.04em;line-height:1;margin-bottom:.6rem;}
+.detail-meta{font-size:.75rem;color:rgba(13,10,20,.45);letter-spacing:.06em;margin-bottom:2rem;padding-bottom:1.2rem;border-bottom:2px solid var(--ink);}
+.detail-content{font-size:.87rem;line-height:1.85;color:rgba(13,10,20,.75);}
+.detail-content p{margin-bottom:1rem;}
+.detail-placeholder{
+  margin-top:2rem;border:2px dashed var(--purple-lt);
+  padding:3rem 2rem;text-align:center;font-size:.8rem;
+  color:var(--purple);letter-spacing:.06em;
+  background:rgba(201,184,240,.08);
+}
+.detail-nav{display:flex;gap:.8rem;margin-top:2.5rem;padding-top:1.5rem;border-top:1.5px solid rgba(13,10,20,.1);}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:3px solid var(--ink);}
+.contact-info{border-right:3px solid var(--ink);padding:2.5rem 2rem;display:flex;flex-direction:column;gap:1.5rem;}
+.contact-item h4{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--purple);margin-bottom:.3rem;}
+.contact-item a,.contact-item p{font-size:.9rem;color:var(--ink);text-decoration:none;}
+.contact-item a:hover{color:var(--purple);}
+.contact-form{padding:2.5rem 2rem;}
+.form-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;margin-bottom:1.5rem;}
+.field{margin-bottom:1rem;}
+.field label{display:block;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--purple);margin-bottom:.35rem;}
+.field input,.field textarea{width:100%;padding:.65rem .9rem;border:2px solid var(--ink);background:var(--paper2);font-family:'DM Mono',monospace;font-size:.82rem;color:var(--ink);outline:none;resize:vertical;transition:border-color .18s,background .18s;}
+.field input:focus,.field textarea:focus{border-color:var(--purple);background:var(--white);}
+.form-success{display:none;margin-top:.8rem;padding:.7rem 1rem;background:var(--purple-pale);border:1.5px solid var(--purple);font-size:.78rem;color:var(--purple);letter-spacing:.04em;}
+
+/* ABOUT ME */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:3px solid var(--ink);margin-top:2rem;}
+.about-bio{border-right:3px solid var(--ink);padding:2.5rem 2rem;display:flex;flex-direction:column;gap:1rem;font-size:.85rem;line-height:1.8;color:rgba(13,10,20,.7);}
+.about-bio strong{color:var(--ink);}
+.about-details{padding:2.5rem 2rem;display:flex;flex-direction:column;gap:0;}
+.about-detail-item{display:flex;flex-direction:column;gap:.25rem;border-bottom:1px solid rgba(13,10,20,.1);padding:.85rem 0;}
+.about-detail-item:first-child{padding-top:0;}
+.about-detail-item:last-child{border-bottom:none;}
+.about-detail-label{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--purple);}
+.about-detail-value{font-size:.87rem;color:var(--ink);}
+@media(max-width:680px){.about-grid{grid-template-columns:1fr;}.about-bio{border-right:none;border-bottom:3px solid var(--ink);}}
+
+/* FOOTER */
+footer{background:var(--ink);border-top:3px solid var(--purple);padding:1.2rem 2.5rem;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;}
+.footer-copy{font-size:.72rem;letter-spacing:.12em;color:rgba(201,184,240,.5);text-transform:uppercase;}
+
+/* RESPONSIVE */
+@media(max-width:680px){
+  .hero{grid-template-columns:1fr;}
+  .hero-right{display:none;}
+  .panel-grid{grid-template-columns:1fr;}
+  .home-grid{grid-template-columns:1fr;}
+  .home-card{border-right:none;border-bottom:1.5px solid var(--ink);}
+  .contact-grid{grid-template-columns:1fr;}
+  .contact-info{border-right:none;border-bottom:3px solid var(--ink);}
+  .nav-links a{padding:.4rem .55rem;font-size:.65rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">✦ PORTFOLIO</div>
+  <div class="nav-links">
+    <a href="#" class="active" data-page="home">HOME</a>
+    <a href="#" data-page="midterm">MIDTERM</a>
+    <a href="#" data-page="final">FINAL</a>
+    <a href="#" data-page="contact">CONTACT</a>
+  </div>
+</nav>
+
+<!-- ══ HOME ══ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-left">
+      <div>
+        <div class="hero-eyebrow">✦ E-Portfolio — Academic Year 2024–2025</div>
+        <div class="hero-name">YOUR<br><span class="accent">NAME</span><br>HERE</div>
+        <p class="hero-desc">Welcome to my e-portfolio. This site showcases my Midterm and Final outputs — a record of what I've learned, built, and discovered throughout the semester.</p>
+      </div>
+      <div>
+        <div class="hero-btns">
+          <button class="btn btn-primary" data-page="midterm">View Midterm</button>
+          <button class="btn btn-outline" data-page="final">View Final</button>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-art">
+        <div class="avatar-frame">🌸</div>
+      </div>
+      <div class="hero-info">
+        <div class="info-row"><span class="info-label">Course</span><span>Your Course Name</span></div>
+        <div class="info-row"><span class="info-label">School</span><span>Your School Name</span></div>
+        <div class="info-row"><span class="info-label">Year</span><span>2024–2025</span></div>
+        <div class="info-row" style="border:none;padding:0;"><span class="info-label">Status</span><span style="color:var(--purple)">● Active</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticker-wrap">
+    <div class="ticker-inner">
+      <span class="ticker-text">MIDTERM OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">FINAL OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">E-PORTFOLIO <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">STUDENT WORK <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">MIDTERM OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">FINAL OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">E-PORTFOLIO <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">STUDENT WORK <span class="ticker-dot">✦</span></span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-num">✦</div>
+      <div class="sec-title">ABOUT ME</div>
+    </div>
+    <p class="sec-sub">A little background on who I am, what I do, and what drives me.</p>
+    <div class="about-bio" style="border:3px solid var(--ink);margin-top:2rem;">
+        <p>Hi, I'm <strong>[Your Name]</strong> — a student passionate about [your field or interest]. I thrive at the intersection of [subject A] and [subject B], and I'm always looking for ways to apply what I learn to real-world challenges.</p>
+        <p>Outside of academics, you'll find me [hobby or interest], [another hobby], or deep-diving into [something you love]. I believe in continuous growth, curiosity, and showing up with intention.</p>
+        <p>This portfolio is a reflection of my journey — the work I've done, the lessons I've taken to heart, and the person I'm becoming through it all.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-num">00</div>
+      <div class="sec-title">ABOUT THIS PORTFOLIO</div>
+    </div>
+    <p class="sec-sub">A curated collection of academic outputs — each piece a checkpoint in my learning journey.</p>
+    <div class="home-grid">
+      <div class="home-card" data-page="midterm">
+        <div class="home-card-label">01</div>
+        <div class="home-card-title">MIDTERM</div>
+        <p class="home-card-desc">Outputs from the first half of the semester — exploring concepts, skills, and foundations.</p>
+        <div class="home-card-arrow">VIEW ALL →</div>
+      </div>
+      <div class="home-card" data-page="final">
+        <div class="home-card-label">02</div>
+        <div class="home-card-title">FINAL</div>
+        <p class="home-card-desc">Final deliverables showcasing everything learned and applied throughout the course.</p>
+        <div class="home-card-arrow">VIEW ALL →</div>
+      </div>
+      <div class="home-card" data-page="contact">
+        <div class="home-card-label">03</div>
+        <div class="home-card-title">CONTACT</div>
+        <p class="home-card-desc">Have a question or want to say hello? Let's get in touch.</p>
+        <div class="home-card-arrow">SAY HELLO →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MIDTERM ══ -->
+<div class="page" id="page-midterm">
+  <div class="ticker-wrap" style="border-top:none;">
+    <div class="ticker-inner">
+      <span class="ticker-text">MIDTERM OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">QUIZZES <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">ACTIVITIES <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">SEATWORK <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">ASSIGNMENT <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">MIDTERM OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">QUIZZES <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">ACTIVITIES <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">SEATWORK <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">ASSIGNMENT <span class="ticker-dot">✦</span></span>
+    </div>
+  </div>
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-num">01</div>
+      <div class="sec-title">MIDTERM OUTPUTS</div>
+    </div>
+    <p class="sec-sub">A collection of outputs from the first half of the semester. Click a panel to expand its outputs, then click an output to view details.</p>
+    <div class="panel-grid">
+
+      <!-- QUIZZES -->
+      <div class="panel">
+        <div class="panel-num">01</div>
+        <div class="panel-body">
+          <span class="panel-tag">Evaluation</span>
+          <div class="panel-title">QUIZZES</div>
+          <p class="panel-desc">Questions, answers, and explanations covering early semester concepts.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('midterm','quiz','Quiz 1','Evaluation','Midterm','Add your description for Quiz 1 here. What topics were covered? What did you find most difficult or interesting?')">
+              <span class="out-label">Quiz 1</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('midterm','quiz','Quiz 2','Evaluation','Midterm','Add your description for Quiz 2 here. What topics were covered? What did you find most difficult or interesting?')">
+              <span class="out-label">Quiz 2</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEATWORK -->
+      <div class="panel">
+        <div class="panel-num">02</div>
+        <div class="panel-body">
+          <span class="panel-tag">Practice</span>
+          <div class="panel-title">SEATWORK</div>
+          <p class="panel-desc">In-class problem solving and hands-on logic exercises.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('midterm','seatwork','Seatwork 1','Practice','Midterm','Describe Seatwork 1 here. What problem did you solve? What approach did you take?')">
+              <span class="out-label">Seatwork 1</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('midterm','seatwork','Seatwork 2','Practice','Midterm','Describe Seatwork 2 here. What problem did you solve? What approach did you take?')">
+              <span class="out-label">Seatwork 2</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('midterm','seatwork','Seatwork 3','Practice','Midterm','Describe Seatwork 3 here. What problem did you solve? What approach did you take?')">
+              <span class="out-label">Seatwork 3</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVITIES -->
+      <div class="panel">
+        <div class="panel-num">03</div>
+        <div class="panel-body">
+          <span class="panel-tag">Application</span>
+          <div class="panel-title">ACTIVITIES</div>
+          <p class="panel-desc">Applied learning activities — programs, systems, and practical exercises.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('midterm','activity','Activity 1','Application','Midterm','Describe Activity 1 here. What did you build or analyze? What did you learn from it?')">
+              <span class="out-label">Activity 1</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('midterm','activity','Activity 2','Application','Midterm','Describe Activity 2 here. What did you build or analyze? What did you learn from it?')">
+              <span class="out-label">Activity 2</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('midterm','activity','Activity 3','Application','Midterm','Describe Activity 3 here. What did you build or analyze? What did you learn from it?')">
+              <span class="out-label">Activity 3</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('midterm','activity','Activity 4','Application','Midterm','Describe Activity 4 here. What did you build or analyze? What did you learn from it?')">
+              <span class="out-label">Activity 4</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('midterm','activity','Activity 5','Application','Midterm','Describe Activity 5 here. What did you build or analyze? What did you learn from it?')">
+              <span class="out-label">Activity 5</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASSIGNMENT -->
+      <div class="panel">
+        <div class="panel-num">04</div>
+        <div class="panel-body">
+          <span class="panel-tag">Work</span>
+          <div class="panel-title">ASSIGNMENT</div>
+          <p class="panel-desc">Take-home assignments exploring topics in depth beyond the classroom.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('midterm','assignment','Assignment 1','Work','Midterm','Describe Assignment 1 here. What was the task? What research or effort did you put into it?')">
+              <span class="out-label">Assignment 1</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('midterm','assignment','Assignment 2','Work','Midterm','Describe Assignment 2 here. What was the task? What research or effort did you put into it?')">
+              <span class="out-label">Assignment 2</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MIDTERM EXAM -->
+      <div class="panel panel-wide">
+        <div class="panel-num">EXAM</div>
+        <div class="panel-body">
+          <span class="panel-tag">Examination</span>
+          <div class="panel-title">MIDTERM EXAMINATION</div>
+          <p class="panel-desc">Final midterm assessment covering all topics from the first half of the semester. Includes answers, reflections, and key takeaways.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('midterm','exam','Midterm Exam','Examination','Midterm','Describe your midterm exam here. What were the key topics? How did you prepare? What was your reflection after taking it?')">
+              <span class="out-label">Midterm Exam</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ FINAL ══ -->
+<div class="page" id="page-final">
+  <div class="ticker-wrap" style="border-top:none;">
+    <div class="ticker-inner">
+      <span class="ticker-text">FINAL OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">PROJECTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">DELIVERABLES <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">FINAL OUTPUTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">PROJECTS <span class="ticker-dot">✦</span></span>
+      <span class="ticker-text">DELIVERABLES <span class="ticker-dot">✦</span></span>
+    </div>
+  </div>
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-num">02</div>
+      <div class="sec-title">FINAL OUTPUTS</div>
+    </div>
+    <p class="sec-sub">Advanced topics and final deliverables — the culmination of everything learned and applied throughout the course.</p>
+    <div class="panel-grid">
+
+      <!-- QUIZZES -->
+      <div class="panel">
+        <div class="panel-num">01</div>
+        <div class="panel-body">
+          <span class="panel-tag">Evaluation</span>
+          <div class="panel-title">QUIZZES</div>
+          <p class="panel-desc">Advanced quiz outputs from the second half of the semester.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('final','quiz','Quiz 4','Evaluation','Final','Describe this final-period quiz here. What topics were assessed?')">
+              <span class="out-label">Quiz 4</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('final','quiz','Quiz 5','Evaluation','Final','Describe this final-period quiz here. What topics were assessed?')">
+              <span class="out-label">Quiz 5</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEATWORK -->
+      <div class="panel">
+        <div class="panel-num">02</div>
+        <div class="panel-body">
+          <span class="panel-tag">Practice</span>
+          <div class="panel-title">SEATWORK</div>
+          <p class="panel-desc">In-class exercises from the final period of the semester.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('final','seatwork','Seatwork 4','Practice','Final','Describe Seatwork 4 here. What was the focus of this exercise?')">
+              <span class="out-label">Seatwork 4</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('final','seatwork','Seatwork 5','Practice','Final','Describe Seatwork 5 here. What was the focus of this exercise?')">
+              <span class="out-label">Seatwork 5</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVITIES -->
+      <div class="panel">
+        <div class="panel-num">03</div>
+        <div class="panel-body">
+          <span class="panel-tag">Application</span>
+          <div class="panel-title">ACTIVITIES</div>
+          <p class="panel-desc">Final-period activities applying advanced concepts and skills.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('final','activity','Activity 5','Application','Final','Describe Activity 5 here. What did you create or analyze?')">
+              <span class="out-label">Activity 5</span><span class="out-arrow">→</span>
+            </div>
+            <div class="output-item" onclick="openDetail('final','activity','Activity 6','Application','Final','Describe Activity 6 here. What did you create or analyze?')">
+              <span class="out-label">Activity 6</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASSIGNMENT -->
+      <div class="panel">
+        <div class="panel-num">04</div>
+        <div class="panel-body">
+          <span class="panel-tag">Work</span>
+          <div class="panel-title">ASSIGNMENT</div>
+          <p class="panel-desc">Final assignments demonstrating depth of understanding and application.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('final','assignment','Assignment 3','Work','Final','Describe Assignment 3 here. What was required? What did you produce?')">
+              <span class="out-label">Assignment 3</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FINAL EXAM -->
+      <div class="panel panel-wide">
+        <div class="panel-num">EXAM</div>
+        <div class="panel-body">
+          <span class="panel-tag">Examination</span>
+          <div class="panel-title">FINAL EXAMINATION</div>
+          <p class="panel-desc">Comprehensive final assessment covering all topics across the full semester. Reflection and key learnings included.</p>
+          <button class="panel-toggle" onclick="toggleList(this)">VIEW OUTPUTS ↓</button>
+          <div class="output-list">
+            <div class="output-item" onclick="openDetail('final','exam','Final Exam','Examination','Final','Describe your final exam here. What were the key topics? What was your biggest takeaway from the course?')">
+              <span class="out-label">Final Exam</span><span class="out-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONTACT ══ -->
+<div class="page" id="page-contact">
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-num">03</div>
+      <div class="sec-title">LET'S GET IN TOUCH</div>
+    </div>
+    <p class="sec-sub">Have a question, want to connect, or just want to say hello?</p>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-item"><h4>Email</h4><a href="mailto:youremail@example.com">youremail@example.com</a></div>
+        <div class="contact-item"><h4>GitHub</h4><a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></div>
+        <div class="contact-item"><h4>School</h4><p>Your School Name</p></div>
+        <div class="contact-item"><h4>Course</h4><p>Your Course Name</p></div>
+      </div>
+      <div class="contact-form">
+        <div class="form-title">SEND A MESSAGE →</div>
+        <div class="field"><label>Name</label><input type="text" id="fname" placeholder="Your name"/></div>
+        <div class="field"><label>Email</label><input type="email" id="femail" placeholder="your@email.com"/></div>
+        <div class="field"><label>Message</label><textarea id="fmessage" rows="5" placeholder="Write your message here..."></textarea></div>
+        <button class="btn btn-primary" onclick="handleSend()">SEND MESSAGE →</button>
+        <div class="form-success" id="form-success">✦ Message sent! Thank you for reaching out.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ OUTPUT DETAIL PAGE ══ -->
+<div class="page" id="page-detail">
+  <div class="detail-wrap">
+    <div class="detail-back" onclick="goBack()">← BACK TO OUTPUTS</div>
+    <div class="detail-eyebrow" id="detail-eyebrow">Midterm · Evaluation</div>
+    <div class="detail-title" id="detail-title">Quiz 1</div>
+    <div class="detail-meta" id="detail-meta">Section: Quizzes · Period: Midterm</div>
+    <div class="detail-content">
+      <p id="detail-desc">Description goes here.</p>
+    </div>
+    <div class="detail-placeholder">📎 Add your output here — paste an image, embed a link, or describe your work in detail above.</div>
+    <div class="detail-nav">
+      <button class="btn btn-outline" onclick="goBack()">← BACK</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-copy">© [name], 2026</div>
+</footer>
+
+<script>
+// ── Navigation ──
+const navLinks = document.querySelectorAll('[data-page]');
+const pages = document.querySelectorAll('.page');
+let prevPage = 'midterm';
+
+function showPage(id) {
+  pages.forEach(p => p.classList.remove('active'));
+  navLinks.forEach(l => l.classList.remove('active'));
+  const pg = document.getElementById('page-' + id);
+  if (pg) pg.classList.add('active');
+  document.querySelectorAll('[data-page="' + id + '"]').forEach(l => l.classList.add('active'));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+navLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    showPage(link.dataset.page);
+  });
+});
+
+// ── Toggle output list ──
+function toggleList(btn) {
+  const list = btn.nextElementSibling;
+  const isOpen = list.classList.contains('open');
+  list.classList.toggle('open');
+  btn.textContent = isOpen ? 'VIEW OUTPUTS ↓' : 'HIDE OUTPUTS ↑';
+}
+
+// ── Open detail page ──
+function openDetail(period, type, title, tag, periodLabel, desc) {
+  prevPage = period;
+  document.getElementById('detail-eyebrow').textContent = periodLabel + ' · ' + tag;
+  document.getElementById('detail-title').textContent = title;
+  document.getElementById('detail-meta').textContent = 'Section: ' + capitalise(type) + ' · Period: ' + periodLabel;
+  document.getElementById('detail-desc').textContent = desc;
+  showPage('detail');
+}
+
+function goBack() {
+  showPage(prevPage);
+}
+
+function capitalise(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+// ── Contact form ──
+function handleSend() {
+  const name = document.getElementById('fname').value.trim();
+  const email = document.getElementById('femail').value.trim();
+  if (!name || !email) { alert('Please fill in your name and email. ✦'); return; }
+  document.getElementById('form-success').style.display = 'block';
+  const btn = document.querySelector('.contact-form .btn');
+  btn.disabled = true; btn.textContent = 'SENT ✦';
+}
+</script>
+</body>
+</html>

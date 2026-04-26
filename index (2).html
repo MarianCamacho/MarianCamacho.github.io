@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MY PORTFOLIO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Klee+One:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --white: #ffffff;
+      --off-white: #f7f5f0;
+      --black: #1a1a1a;
+      --deep: #0d0d0d;
+      --yellow: #f5d547;
+      --yellow-soft: #fce97a;
+      --lavender: #c8b8e8;
+      --sky: #a8d4f5;
+      --mint: #a8e8c8;
+      --blush: #f5b8c8;
+      --gray: #888888;
+      --light-gray: #dddddd;
+      --text-mid: #555555;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Courier Prime', monospace;
+      background: var(--white);
+      color: var(--black);
+      cursor: none;
+      overflow-x: hidden;
+    }
+    .cursor {
+      position: fixed;
+      width: 12px; height: 12px;
+      background: var(--black);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, background 0.2s;
+      transform: translate(-50%, -50%);
+    }
+    .cursor.on-color { background: var(--yellow); transform: translate(-50%,-50%) scale(1.5); }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.012) 3px, rgba(0,0,0,0.012) 4px);
+      pointer-events: none; z-index: 998;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 3rem;
+      background: var(--white);
+      border-bottom: 2px solid var(--black);
+    }
+    .nav-logo { font-weight: 700; font-size: 0.9rem; letter-spacing: 0.2em; text-transform: uppercase; }
+    .nav-logo span { background: var(--black); color: var(--white); padding: 0.1rem 0.5rem; margin-right: 0.4rem; }
+    .nav-links { display: flex; gap: 0; list-style: none; }
+    .nav-links li { border-left: 1px solid var(--black); }
+    .nav-links li:last-child { border-right: 1px solid var(--black); }
+    .nav-links a {
+      display: block; padding: 0.5rem 1.4rem;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--black); text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-links a:hover { background: var(--black); color: var(--yellow); }
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: var(--white); position: relative; overflow: hidden; padding-top: 70px;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: linear-gradient(var(--light-gray) 1px, transparent 1px), linear-gradient(90deg, var(--light-gray) 1px, transparent 1px);
+      background-size: 60px 60px; opacity: 0.4;
+    }
+    .hero-inner { position: relative; z-index: 2; text-align: center; max-width: 700px; padding: 2rem; }
+    .omori-box {
+      width: 130px; height: 130px; border: 3px solid var(--black); background: var(--white);
+      margin: 0 auto 2rem; display: flex; align-items: center; justify-content: center;
+      position: relative; box-shadow: 6px 6px 0 var(--black);
+      animation: bob 3s ease-in-out infinite;
+    }
+    .omori-box::before { content: ''; position: absolute; inset: 4px; border: 1px solid var(--light-gray); }
+    .omori-face { font-size: 3.5rem; line-height: 1; }
+    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .hero-eyecatch { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gray); margin-bottom: 1rem; }
+    .hero h1 { font-weight: 700; font-size: clamp(2.5rem,7vw,5rem); line-height: 1; letter-spacing: -0.02em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .hero h1 .highlight { display: inline-block; background: var(--yellow); padding: 0 0.2em; font-style: italic; }
+    .hero-sub { font-family: 'Klee One', cursive; font-size: 1.1rem; color: var(--text-mid); margin: 1.2rem auto 2.5rem; max-width: 480px; line-height: 1.8; }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-block; background: var(--black); color: var(--yellow);
+      font-weight: 700; font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 0.9rem 2rem; text-decoration: none; border: 2px solid var(--black);
+      box-shadow: 4px 4px 0 var(--gray); transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .btn-primary:hover { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--gray); }
+    .btn-secondary {
+      display: inline-block; background: var(--white); color: var(--black);
+      font-weight: 700; font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 0.9rem 2rem; text-decoration: none; border: 2px solid var(--black);
+      box-shadow: 4px 4px 0 var(--black); transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .btn-secondary:hover { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--black); }
+    .doodle { position: absolute; font-size: 1.5rem; opacity: 0.5; animation: drift 6s ease-in-out infinite; pointer-events: none; }
+    @keyframes drift { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-12px) rotate(5deg); } }
+    #about { background: var(--black); color: var(--white); padding: 7rem 2rem; position: relative; overflow: hidden; }
+    #about::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 10% 50%, rgba(200,184,232,0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 90% 20%, rgba(168,212,245,0.12) 0%, transparent 50%),
+                  radial-gradient(circle at 50% 90%, rgba(245,213,71,0.08) 0%, transparent 50%);
+    }
+    .about-inner { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.4fr; gap: 4rem; align-items: start; }
+    .section-eyebrow { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--yellow); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+    .section-eyebrow::before { content: '▶'; font-size: 0.6rem; }
+    .section-title-big { font-weight: 700; font-size: clamp(2rem,4vw,3rem); text-transform: uppercase; line-height: 1.1; margin-bottom: 2rem; }
+    .section-title-big .acc { color: var(--yellow); }
+    .about-text p { font-family: 'Klee One', cursive; font-size: 1rem; line-height: 1.9; color: rgba(255,255,255,0.75); margin-bottom: 1rem; }
+    .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 2rem; }
+    .skill-item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; color: rgba(255,255,255,0.9); padding: 0.6rem 0.8rem; border: 1px solid rgba(255,255,255,0.15); transition: border-color 0.2s, background 0.2s; }
+    .skill-item:hover { border-color: var(--yellow); background: rgba(245,213,71,0.08); }
+    .skill-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .stat-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .stat-card { border: 2px solid rgba(255,255,255,0.15); padding: 1.5rem; position: relative; overflow: hidden; transition: border-color 0.2s; }
+    .stat-card::before { content: ''; position: absolute; width: 80px; height: 80px; border-radius: 50%; top: -20px; right: -20px; opacity: 0.3; }
+    .stat-card:nth-child(1)::before { background: var(--yellow); }
+    .stat-card:nth-child(2)::before { background: var(--lavender); }
+    .stat-card:nth-child(3)::before { background: var(--sky); }
+    .stat-card:nth-child(4)::before { background: var(--mint); }
+    .stat-card:hover { border-color: rgba(255,255,255,0.4); }
+    .stat-num { font-weight: 700; font-size: 2.5rem; color: var(--white); line-height: 1; margin-bottom: 0.4rem; }
+    .stat-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+    .section-light { background: var(--off-white); padding: 7rem 2rem; position: relative; }
+    .section-light-inner { max-width: 1100px; margin: 0 auto; }
+    .section-eyebrow-dark { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-mid); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+    .section-eyebrow-dark::before { content: '▶'; font-size: 0.6rem; }
+    .section-title-dark { font-weight: 700; font-size: clamp(2rem,4vw,3rem); text-transform: uppercase; color: var(--black); margin-bottom: 0.8rem; }
+    .section-desc { font-family: 'Klee One', cursive; font-size: 0.95rem; color: var(--text-mid); margin-bottom: 3rem; max-width: 500px; line-height: 1.8; }
+    .divider { height: 3px; background: var(--black); margin-bottom: 3rem; position: relative; }
+    .divider::after { content: '✦'; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); background: var(--off-white); padding: 0 0.8rem; font-size: 0.8rem; color: var(--black); }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+    .project-card { background: var(--white); border: 2px solid var(--black); display: block; text-decoration: none; color: inherit; position: relative; box-shadow: 5px 5px 0 var(--black); transition: transform 0.15s, box-shadow 0.15s; overflow: hidden; }
+    .project-card:hover { transform: translate(3px,3px); box-shadow: 2px 2px 0 var(--black); }
+    .project-thumb { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 3rem; border-bottom: 2px solid var(--black); position: relative; overflow: hidden; }
+    .project-thumb::after { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s; background: repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(255,255,255,0.15) 8px, rgba(255,255,255,0.15) 16px); }
+    .project-card:hover .project-thumb::after { opacity: 1; }
+    .project-body { padding: 1.3rem; }
+    .project-type { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem; }
+    .project-type::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    .type-midterm { color: #c45c5c; } .type-final { color: #5c7ac4; } .type-lab { color: #7c5cc4; } .type-activity { color: #5ca87c; }
+    .project-title { font-weight: 700; font-size: 1.15rem; color: var(--black); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.02em; }
+    .project-desc { font-family: 'Klee One', cursive; font-size: 0.875rem; color: var(--text-mid); line-height: 1.7; margin-bottom: 1rem; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+    .project-tag { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.6rem; border: 1px solid var(--black); color: var(--black); background: transparent; }
+    .project-link { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--black); display: inline-flex; align-items: center; gap: 0.4rem; border-bottom: 2px solid var(--black); padding-bottom: 0.1rem; text-decoration: none; transition: gap 0.15s; }
+    .project-link:hover { gap: 0.7rem; }
+    #contact { background: var(--black); color: var(--white); padding: 7rem 2rem; text-align: center; position: relative; overflow: hidden; }
+    #contact::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 60%, rgba(245,213,71,0.08) 0%, transparent 50%), radial-gradient(circle at 70% 30%, rgba(200,184,232,0.1) 0%, transparent 50%); }
+    .contact-inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+    .contact-sub { font-family: 'Klee One', cursive; font-size: 1rem; color: rgba(255,255,255,0.65); line-height: 1.8; margin-bottom: 2.5rem; }
+    .emotion-bar { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 3rem; }
+    .emotion-chip { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.4rem 1rem; border: 1px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.7); }
+    footer { background: var(--deep); color: rgba(255,255,255,0.35); text-align: center; padding: 2rem; font-size: 0.75rem; letter-spacing: 0.1em; border-top: 1px solid rgba(255,255,255,0.08); }
+    footer strong { color: var(--yellow); }
+    .fade-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    @keyframes flicker { 0% { opacity:0; } 10% { opacity:1; } 12% { opacity:0; } 14% { opacity:1; } 100% { opacity:1; } }
+    .flicker { animation: flicker 1.2s ease forwards; }
+    @media (max-width: 720px) {
+      .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      nav { padding: 1rem 1.2rem; }
+      .nav-links a { padding: 0.5rem 0.9rem; font-size: 0.65rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+
+  <nav>
+    <div class="nav-logo"><span>✦</span> PORTFOLIO</div>
+    <ul class="nav-links">
+      <li><a href="#home">HOME</a></li>
+      <li><a href="#midterm">MIDTERM</a></li>
+      <li><a href="#final">FINAL</a></li>
+      <li><a href="#contact">CONTACT</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero" id="home">
+    <div class="doodle" style="top:15%;left:8%;animation-delay:0s;">★</div>
+    <div class="doodle" style="top:25%;right:10%;animation-delay:0.8s;">♦</div>
+    <div class="doodle" style="bottom:20%;left:12%;animation-delay:1.4s;">✿</div>
+    <div class="doodle" style="bottom:15%;right:8%;animation-delay:0.4s;">◆</div>
+    <div class="hero-inner flicker">
+      <div class="omori-box"><div class="omori-face">🖤</div></div>
+      <p class="hero-eyecatch">... something is here.</p>
+      <h1><span class="highlight">YOUR NAME</span><br/>PORTFOLIO</h1>
+      <p class="hero-sub">A collection of projects from this semester —<br/>each one a memory, each one a step forward.</p>
+      <div class="hero-actions">
+        <a href="#midterm" class="btn-primary">▶ MIDTERM</a>
+        <a href="#final" class="btn-secondary">▶ FINAL</a>
+      </div>
+    </div>
+  </div>
+
+  <section id="about">
+    <div class="about-inner">
+      <div class="about-left fade-up">
+        <div class="section-eyebrow">ABOUT ME</div>
+        <h2 class="section-title-big">WHO<br/>AM <span class="acc">I?</span></h2>
+        <div class="about-text">
+          <p>Hi! I'm a student currently taking a programming class. This portfolio is a collection of everything I've built this semester — from early exercises to my final project.</p>
+          <p>Every project here represents something I learned, struggled through, and figured out. I'm proud of how far I've come.</p>
+        </div>
+        <div class="skills-grid" style="margin-top:2rem;">
+          <div class="skill-item"><div class="skill-dot" style="background:var(--yellow)"></div>HTML</div>
+          <div class="skill-item"><div class="skill-dot" style="background:var(--lavender)"></div>CSS</div>
+          <div class="skill-item"><div class="skill-dot" style="background:var(--sky)"></div>JavaScript</div>
+          <div class="skill-item"><div class="skill-dot" style="background:var(--mint)"></div>Python</div>
+          <div class="skill-item"><div class="skill-dot" style="background:var(--blush)"></div>Git & GitHub</div>
+          <div class="skill-item"><div class="skill-dot" style="background:var(--yellow-soft)"></div>Problem Solving</div>
+        </div>
+      </div>
+      <div class="fade-up" style="transition-delay:0.15s;">
+        <div class="stat-cards">
+          <div class="stat-card"><div class="stat-num">5+</div><div class="stat-label">Projects Built</div></div>
+          <div class="stat-card"><div class="stat-num">2</div><div class="stat-label">Major Outputs</div></div>
+          <div class="stat-card"><div class="stat-num">1</div><div class="stat-label">Final Project</div></div>
+          <div class="stat-card"><div class="stat-num">∞</div><div class="stat-label">Things Learned</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-light" id="midterm">
+    <div class="section-light-inner">
+      <div class="section-eyebrow-dark fade-up">MIDTERM OUTPUTS</div>
+      <h2 class="section-title-dark fade-up">MIDTERM</h2>
+      <p class="section-desc fade-up">Projects and exercises completed before the midterm. Click any card to view it on GitHub.</p>
+      <div class="divider"></div>
+      <div class="projects-grid">
+        <a href="https://github.com/yourusername/midterm-project" target="_blank" class="project-card fade-up">
+          <div class="project-thumb" style="background:#fce8e8;">🌹</div>
+          <div class="project-body">
+            <div class="project-type type-midterm">Midterm Output</div>
+            <h3 class="project-title">Midterm Project Title</h3>
+            <p class="project-desc">Describe what your midterm project does and what you learned building it. Replace this with your actual content!</p>
+            <div class="project-tags"><span class="project-tag">HTML</span><span class="project-tag">CSS</span><span class="project-tag">JavaScript</span></div>
+            <span class="project-link">View on GitHub →</span>
+          </div>
+        </a>
+        <a href="https://github.com/yourusername/lab-1" target="_blank" class="project-card fade-up" style="transition-delay:0.05s;">
+          <div class="project-thumb" style="background:#ede8fc;">🔮</div>
+          <div class="project-body">
+            <div class="project-type type-lab">Laboratory</div>
+            <h3 class="project-title">Lab Exercise 1</h3>
+            <p class="project-desc">Describe what this lab exercise was about and what concepts it helped you practice.</p>
+            <div class="project-tags"><span class="project-tag">Variables</span><span class="project-tag">Basics</span></div>
+            <span class="project-link">View on GitHub →</span>
+          </div>
+        </a>
+        <a href="https://github.com/yourusername/activity-1" target="_blank" class="project-card fade-up" style="transition-delay:0.10s;">
+          <div class="project-thumb" style="background:#e8f5e8;">🌿</div>
+          <div class="project-body">
+            <div class="project-type type-activity">Activity</div>
+            <h3 class="project-title">Activity 1</h3>
+            <p class="project-desc">What was this activity about? What did you build or practice? Add your real description here!</p>
+            <div class="project-tags"><span class="project-tag">Loops</span><span class="project-tag">Conditionals</span></div>
+            <span class="project-link">View on GitHub →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-light" id="final" style="background:var(--white);">
+    <div class="section-light-inner">
+      <div class="section-eyebrow-dark fade-up">FINAL OUTPUTS</div>
+      <h2 class="section-title-dark fade-up">FINAL</h2>
+      <p class="section-desc fade-up">My most polished work — built towards the end of the semester. Click any card to view it on GitHub.</p>
+      <div class="divider"></div>
+      <div class="projects-grid">
+        <a href="https://github.com/yourusername/final-project" target="_blank" class="project-card fade-up">
+          <div class="project-thumb" style="background:#e8eef8;">🌊</div>
+          <div class="project-body">
+            <div class="project-type type-final">Final Output</div>
+            <h3 class="project-title">Final Project Title</h3>
+            <p class="project-desc">Your most polished work! Describe what your final project is, what problem it solves, and the technologies used.</p>
+            <div class="project-tags"><span class="project-tag">Python</span><span class="project-tag">Data Structures</span></div>
+            <span class="project-link">View on GitHub →</span>
+          </div>
+        </a>
+        <a href="https://github.com/yourusername/lab-2" target="_blank" class="project-card fade-up" style="transition-delay:0.05s;">
+          <div class="project-thumb" style="background:#fdf5e0;">☀️</div>
+          <div class="project-body">
+            <div class="project-type type-lab">Laboratory</div>
+            <h3 class="project-title">Lab Exercise 2</h3>
+            <p class="project-desc">Describe this lab — functions, arrays, or something else you were working on. Replace with real content!</p>
+            <div class="project-tags"><span class="project-tag">Functions</span><span class="project-tag">Arrays</span></div>
+            <span class="project-link">View on GitHub →</span>
+          </div>
+        </a>
+        <a href="https://github.com/yourusername/extra" target="_blank" class="project-card fade-up" style="transition-delay:0.10s;">
+          <div class="project-thumb" style="background:#fce8f0;">🌸</div>
+          <div class="project-body">
+            <div class="project-type type-activity">Bonus / Extra</div>
+            <h3 class="project-title">Additional Project</h3>
+            <p class="project-desc">Got an extra project or creative exercise? Add it here! Great for anything that doesn't fit other categories.</p>
+            <div class="project-tags"><span class="project-tag">Creative</span><span class="project-tag">Extra</span></div>
+            <span class="project-link">View on GitHub →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="section-eyebrow" style="justify-content:center;margin-bottom:1rem;">CONTACT</div>
+      <h2 class="section-title-big fade-up">LET'S <span class="acc">TALK.</span></h2>
+      <p class="contact-sub fade-up">Feel free to reach out if you'd like to know more about my projects, or just want to say hi!</p>
+      <div class="emotion-bar fade-up">
+        <span class="emotion-chip">HAPPY</span>
+        <span class="emotion-chip">CURIOUS</span>
+        <span class="emotion-chip">CREATIVE</span>
+        <span class="emotion-chip">DETERMINED</span>
+      </div>
+      <a href="mailto:youremail@example.com" class="btn-primary fade-up" style="font-size:0.85rem;padding:1rem 2.5rem;">✉ SAY HELLO</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>MADE WITH 🖤 BY <strong>YOUR NAME</strong> &nbsp;·&nbsp; PROGRAMMING CLASS PORTFOLIO &nbsp;·&nbsp; 2025</p>
+  </footer>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('on-color'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('on-color'));
+    });
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
